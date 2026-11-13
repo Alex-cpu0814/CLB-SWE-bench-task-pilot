@@ -1,0 +1,8 @@
+{
+  "datasets": [
+    "clb-local/CLB-SWE-bench-task-pilot"
+  ],
+  "splits": [
+    "test"
+  ]
+}

@@ -1,0 +1,32 @@
+[
+  {
+    "instance_id": "clb-pyc-002",
+    "case": "case002",
+    "cohort": "python50",
+    "original_base_image": "yutu0814/pyc-case-002-scipy@sha256:a06dba0866df6cc6a1b517fb2516808a1afb412e1ced4adb6fec3518c33cc617",
+    "original_image_id": "sha256:a06dba0866df6cc6a1b517fb2516808a1afb412e1ced4adb6fec3518c33cc617",
+    "candidate_source": "repair_trials/batches/mini_baseline_formal50_20261027/cases/case002/model_patch.diff",
+    "candidate_sha256": "07d880b0d83f1e15243d138d9834bbf77aa182ff1012444822b486802c7e88a7",
+    "source_expected_outcome": "unresolved"
+  },
+  {
+    "instance_id": "clb-javac-093",
+    "case": "javac_case_093",
+    "cohort": "java_author11",
+    "original_base_image": "yutu0814/javac-case-093-jep@sha256:acc01f758d28a94ab99d3e35eeaee06bd65f9a119daf4b2522e469c6994e3942",
+    "original_image_id": "sha256:acc01f758d28a94ab99d3e35eeaee06bd65f9a119daf4b2522e469c6994e3942",
+    "candidate_source": "repair_trials/batches/mini_baseline_glm5_bailian_20261110/diagnostics/recovery_093_175_194/cases/javac_case_093/model_patch.diff",
+    "candidate_sha256": "4f15c558da8d399ff08c7981b48fa54f9b2f3a6b0f66508f6e3d9138fd456550",
+    "source_expected_outcome": "resolved"
+  },
+  {
+    "instance_id": "clb-javac-175",
+    "case": "javac_case_175",
+    "cohort": "java_upstream11",
+    "original_base_image": "yutu0814/javac-case-175-junixsocket@sha256:d5eaaed040c90536d22f0ef5548ad00d2ec61b59e698d725014695479df8a20d",
+    "original_image_id": "sha256:d5eaaed040c90536d22f0ef5548ad00d2ec61b59e698d725014695479df8a20d",
+    "candidate_source": "repair_trials/batches/mini_baseline_glm5_bailian_20261110/diagnostics/recovery_093_175_194/cases/javac_case_175/model_patch.diff",
+    "candidate_sha256": "cc11ba9a19757cc75a8284d3de31ce61fcf121fa79f12083994421cffe881c77",
+    "source_expected_outcome": "unresolved"
+  }
+]
