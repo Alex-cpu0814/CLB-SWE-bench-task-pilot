@@ -1,2 +1,2 @@
-FROM yutu0814/pyc-case-159-fast-histogram@sha256:6c5fb4016d7c9713831eb383ae90b667367d51538afd93fd0bdfd6edefa11313
+FROM yutu0814/clb.base.x86_64.astrofrog_1776_fast-histogram-clb-159:latest@sha256:6fbd36c532784c0171e4fedf668e9bf95a1d2b942a4fd1ffeefea48887c0c0ac
 COPY runtime/ /benchmark/

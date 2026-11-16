@@ -1,2 +1,2 @@
-FROM yutu0814/pyc-case-077-pygame@sha256:9033751a383ee84641f989c2efc2da75bec96025e77dda11dd9736a992a9a912
+FROM yutu0814/clb.base.x86_64.pygame_1776_pygame-clb-077:latest@sha256:7707b84c946a4597488097a8db50e6fa4732fd7612035c723cbd95d2e7a1103f
 COPY runtime/ /benchmark/

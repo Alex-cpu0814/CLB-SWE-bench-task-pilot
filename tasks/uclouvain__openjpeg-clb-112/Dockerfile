@@ -1,3 +1,3 @@
-FROM yutu0814/javac-case-112-openjpeg@sha256:33a22445240b5d6abba03d5c41a277d721fc8940f51aa3e7b7138daeb2f87305
+FROM yutu0814/clb.base.x86_64.uclouvain_1776_openjpeg-clb-112:latest@sha256:4a430d91af964c217ec712915e674c51abb807646b75882f2a637ee1977daecc
 COPY runtime/ /benchmark/
 RUN git -C /testbed clean -fdx -e bin

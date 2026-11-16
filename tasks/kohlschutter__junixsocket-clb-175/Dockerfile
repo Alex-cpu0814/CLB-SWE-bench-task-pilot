@@ -1,2 +1,2 @@
-FROM yutu0814/javac-case-175-junixsocket@sha256:d5eaaed040c90536d22f0ef5548ad00d2ec61b59e698d725014695479df8a20d
+FROM yutu0814/clb.base.x86_64.kohlschutter_1776_junixsocket-clb-175:latest@sha256:94f2d0c8e23d5fcf5c423a54d8348136df6c891adb863910303fd41fdcd113d5
 COPY runtime/ /opt/clb-pilot/

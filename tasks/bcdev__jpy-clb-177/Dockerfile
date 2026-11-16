@@ -1,2 +1,2 @@
-FROM yutu0814/pyc-case-177-jpy@sha256:ab2807d63d39277830ff04f241fbbfd256dfcac53b6445f4cfa0b1b0dd61e737
+FROM yutu0814/clb.base.x86_64.bcdev_1776_jpy-clb-177:latest@sha256:07fcc15bbe16c11425ca3cf8bf5b02e5b40ace448d3273bf58a77e3ae4c0261b
 COPY runtime/ /benchmark/

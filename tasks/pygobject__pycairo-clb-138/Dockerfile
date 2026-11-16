@@ -1,2 +1,2 @@
-FROM yutu0814/pyc-case-138-pycairo@sha256:070d14e959d62f2f50cecf0d12900951f15be77f94e57ad208c3fecd43426b9f
+FROM yutu0814/clb.base.x86_64.pygobject_1776_pycairo-clb-138:latest@sha256:e713b7660f879bea9533766d1f8266e864fc97e91e0fe3858aaff2e07ba0f478
 COPY runtime/ /benchmark/

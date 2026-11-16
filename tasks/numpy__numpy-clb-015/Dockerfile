@@ -1,2 +1,2 @@
-FROM yutu0814/pyc-case-015-numpy@sha256:f2da0afcaca3b41ce053ae0355187005b364e3490eda7dbeecac6561e03d5967
+FROM yutu0814/clb.base.x86_64.numpy_1776_numpy-clb-015:latest@sha256:e5c51d395a823b4da66ba0a7620336cf0f7f0fb4bc1e3758453c37e1a9090c0f
 COPY runtime/ /benchmark/

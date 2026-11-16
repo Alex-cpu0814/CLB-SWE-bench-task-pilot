@@ -1,2 +1,2 @@
-FROM yutu0814/pyc-case-071-ultrajson@sha256:cccd9f8154691264a74f0304fc6ef42e3176983d9c404de0da999c76a38cec66
+FROM yutu0814/clb.base.x86_64.ultrajson_1776_ultrajson-clb-071:latest@sha256:1360b4e409af17a90319f15a59f1d3af12cc75c5c0aade43f712b4d06eeb6587
 COPY runtime/ /benchmark/

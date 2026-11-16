@@ -119,7 +119,7 @@ def format_test_log(legacy_evaluator, legacy_status_function, unittest_log):
     return "\n\n".join(sections).encode("utf-8")
 
 
-def task_files(row, record, dataset, evaluator_root, legacy_status_function):
+def task_files(row, record, dataset, evaluator_root, legacy_status_function, base_image):
     name = release_instance_id(row)
     case = evaluator_root / "cases" / record["case"]
     config = read_json(case / "evaluator/case_config.json")
@@ -128,10 +128,9 @@ def task_files(row, record, dataset, evaluator_root, legacy_status_function):
     if row["base_commit"] != config["base_commit"] or any(grading[key] != tests[key] for key in TEST_KEYS):
         raise ValueError(f"Frozen data and evaluator disagree for {name}")
 
-    image = row["image"]["pull_reference"]
-    if not re.fullmatch(r"[\w./:-]+@sha256:[0-9a-f]{64}", image):
-        raise ValueError(f"Missing immutable image reference for {name}")
-    dockerfile = f"FROM {image}\nCOPY runtime/ /benchmark/\n"
+    dockerfile = f"FROM {base_image}\nCOPY runtime/ /benchmark/\n"
+    if record["case"] == "javac_case_075":
+        dockerfile += "RUN ln -s /opt/clb-deps /benchmark/dependencies\n"
     if record["case"] == "javac_case_200":
         # The frozen checkout is owned by the image user, while the harness runs as root.
         dockerfile += "USER root\nRUN git config --system --add safe.directory /testbed\n"
@@ -202,6 +201,14 @@ def main():
     frozen_by_release = {release_instance_id(row): row["instance_id"] for row in rows}
     if len(frozen_by_release) != len(rows):
         parser.error("Release instance IDs must be unique")
+    base_images = read_json(ROOT / "base-images.json")
+    if base_images.keys() != frozen_by_release.keys():
+        parser.error("Base image manifest must cover every release instance")
+    for name, reference in base_images.items():
+        slug = name.replace("__", "_1776_")
+        prefix = f"yutu0814/clb.base.x86_64.{slug}:latest@sha256:"
+        if not reference.startswith(prefix) or not re.fullmatch(r"[0-9a-f]{64}", reference[len(prefix):]):
+            parser.error(f"Invalid pinned Base image for {name}")
     selected = {frozen_by_release.get(name, name) for name in args.instance or rows_by_id}
     if unknown := selected - rows_by_id.keys():
         parser.error(f"Unknown instances: {', '.join(sorted(unknown))}")
@@ -213,6 +220,7 @@ def main():
     for frozen_id in sorted(selected):
         row = rows_by_id[frozen_id]
         name = release_instance_id(row)
+        base_image = base_images[name]
         if frozen_id in FROZEN_PILOT_IDS:
             files = {
                 field: row[key].encode("utf-8") for field, key in
@@ -224,8 +232,11 @@ def main():
             metadata = read_json(metadata_path)
             if metadata.get("instance_id") != name or metadata.get("image") != evaluation_image(name):
                 parser.error(f"Incorrect pilot instance ID or image: {metadata_path}")
+            dockerfile = metadata_path.with_name("Dockerfile")
+            if not dockerfile.is_file() or not dockerfile.read_bytes().startswith(f"FROM {base_image}\n".encode()):
+                parser.error(f"Incorrect pilot Base image: {dockerfile}")
         else:
-            files = task_files(row, records[frozen_id], dataset, evaluator, status_function)
+            files = task_files(row, records[frozen_id], dataset, evaluator, status_function, base_image)
         for filename, expected in files.items():
             target = ROOT / "tasks" / name / filename
             if target.is_file() and target.read_bytes() == expected:

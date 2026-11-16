@@ -1,2 +1,2 @@
-FROM yutu0814/pyc-case-174-spglib@sha256:370afac41f58090a6e2e5b252836e1f5aedc8a31127910c403ce5782eb0c89a1
+FROM yutu0814/clb.base.x86_64.spglib_1776_spglib-clb-174:latest@sha256:494bc87195b7935e77944f1fa9eef0bbbdfb144de503843d2c32129de6ce5b9f
 COPY runtime/ /benchmark/

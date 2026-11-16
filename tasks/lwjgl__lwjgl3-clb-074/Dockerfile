@@ -1,3 +1,3 @@
-FROM yutu0814/javac-case-074-lwjgl3@sha256:bf12eb7755f877cb56804e10e4a1336856d076f7fe76c92935124febce443226
+FROM yutu0814/clb.base.x86_64.lwjgl_1776_lwjgl3-clb-074:latest@sha256:b44598bbab33b72ad28c9e23a9b635689fbe9ba38391f551fa2fede76f82da8d
 COPY runtime/ /benchmark/
 RUN git -C /testbed clean -fdx -e bin

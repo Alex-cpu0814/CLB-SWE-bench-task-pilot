@@ -1,3 +1,3 @@
-FROM yutu0814/javac-case-097-jep@sha256:8377bd71afd8d7673a7effb4473bbf204e57a1cad7c41fcc54caa11d3c7c1657
+FROM yutu0814/clb.base.x86_64.ninia_1776_jep-clb-097:latest@sha256:c7c49ac969885f0a4d0e198b07d853bb3cc6f6c370bbeebca3fdcee72e50ee77
 COPY runtime/ /benchmark/
 RUN git -C /testbed clean -fdx

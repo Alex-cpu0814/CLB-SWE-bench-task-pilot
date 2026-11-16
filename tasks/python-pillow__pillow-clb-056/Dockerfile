@@ -1,2 +1,2 @@
-FROM yutu0814/pyc-case-056-pillow@sha256:abeb4e9ddc951a5c0e9d63f1d5d0c23a8c0bcb668606cfab3e67adde60b76970
+FROM yutu0814/clb.base.x86_64.python-pillow_1776_pillow-clb-056:latest@sha256:fc777915271e0b37d9e1a6482ae89355d1a56964ee798cbf01dffa15fba985e9
 COPY runtime/ /benchmark/

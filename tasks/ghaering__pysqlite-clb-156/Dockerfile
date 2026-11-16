@@ -1,2 +1,2 @@
-FROM yutu0814/pyc-case-156-pysqlite@sha256:b50c96b41175954a45f6372c0271846b3ebe4c3c74422ad91b0d025f38b82ac0
+FROM yutu0814/clb.base.x86_64.ghaering_1776_pysqlite-clb-156:latest@sha256:8b2bcaa9d01fd6d7d8d9c7188699d3b88328d98eeffbf0fe755738bcb0bcf31e
 COPY runtime/ /benchmark/

@@ -15,7 +15,8 @@
 
 `tasks/<instance_id>/` 中的 `task.yaml` 记录实例、仓库和 Base commit，
 `problem_statement.md`、`gold.patch`、`test.patch`、`tests.json` 直接对应冻结版数据。
-`Dockerfile` 使用固定 digest 的 CLB Base 镜像，添加各题评测所用的构建和测试脚本。
+`Dockerfile` 从 [Base 镜像清单](base-images.json) 引用 `yutu0814/clb.base.x86_64.*:latest`，
+并同时锁定 `sha256`。镜像用于提供各题的原始代码和依赖，Dockerfile 再添加评测所用的构建和测试脚本。
 官方评测器应用候选补丁，调用 `eval.sh` 加载测试补丁、运行测试并判分。
 迁移后的日志转换沿用各题原有的测试状态解析逻辑。生成模型补丁时用冻结版题面和
 原 Base 镜像，评测运行所需的脚本及补丁由评测侧读取。
@@ -23,7 +24,7 @@
 `import_frozen_tasks.py` 从冻结发布目录导入三题试点之外的任务。维护者可在仓库根目录运行
 `python import_frozen_tasks.py ../CLB-SWE-bench-v1 --check` 核对导入文件。
 
-## 72 题迁移验证
+## 72 题迁移验证（原 Base 镜像）
 
 官方 `swebench dataset check .` 和 `swebench dataset build .` 已通过。按新旧 ID 对照表核对后，
 导出的 72 条记录与冻结数据的仓库、Base、题面、补丁和测试列表一致。回放了新导入任务的 131 份原始测试日志，
@@ -120,3 +121,12 @@ swebench eval clb-local/CLB-SWE-bench-task-pilot --task-repo . \
 镜像为 NumPy `numpy__numpy-clb-010` 构建了新的评测镜像。官方 `swebench eval` 分别评测了
 该题的 Gold 补丁和历史 GLM-5 候选补丁，两次均通过全部 6 项目标测试和 3 项回归测试。
 这次验证在同一台机器上复用了 Docker 缓存。
+
+## 新 Base 镜像验证
+
+使用 SWE-bench 5.0.2 从新 Dockerfile 构建了 72 个评测镜像。构建复用了本机 Base 缓存。
+72 个 Base 控制均未解决，72 个 Gold 控制均通过。导出的 72 条数据与前一版逐字段一致。
+
+- `lwjgl__lwjgl3-clb-075` 的依赖移至 `/opt/clb-deps`。Dockerfile 将这个目录链接到构建器使用的原路径。复测 Base 和 Gold 后，目标与回归测试结果均与归档计数一致。
+- `kohlschutter__junixsocket-clb-160` 的 Gold 在并行运行时触发 Maven 超时，串行复测通过。
+- `pygobject__pycairo-clb-139` 的三项回归测试均通过，目标测试触发进程中止，退出码为 134。旧镜像有两次相同记录，冻结汇总采用的是目标测试报告 `FAILED`、退出码为 1 的一次运行。两种情况下 SWE-bench 对 Base 的判分均为未解决，Gold 通过全部四项测试。

@@ -1,2 +1,2 @@
-FROM yutu0814/pyc-case-049-cheetah@sha256:9b8ca8cf610a15b88d144cab71608125a57d9fa61fd9d41664684b023d991629
+FROM yutu0814/clb.base.x86_64.cheetahtemplate3_1776_cheetah3-clb-049:latest@sha256:61c541841763cde53bfa8f7988af1fe529a675a5612c6a39fc45d2bb56c5ff85
 COPY runtime/ /benchmark/

@@ -1,2 +1,2 @@
-FROM yutu0814/javac-case-093-jep@sha256:acc01f758d28a94ab99d3e35eeaee06bd65f9a119daf4b2522e469c6994e3942
+FROM yutu0814/clb.base.x86_64.ninia_1776_jep-clb-093:latest@sha256:4ac5cee19d541869db19dc060db7ea23928c001afff67ef8655bca0ba7607015
 COPY runtime/ /opt/clb-pilot/
