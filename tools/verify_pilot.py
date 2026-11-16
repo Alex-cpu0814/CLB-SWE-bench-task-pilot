@@ -14,7 +14,8 @@ from swebench.harness.utils import make_test_spec
 from swebench.task.repo import load_task_repo
 
 
-ROOT = Path(__file__).resolve().parent
+ROOT = Path(__file__).resolve().parents[1]
+FIXTURES = Path(__file__).resolve().with_name("fixtures")
 CONTROL_MODELS = {"base": "clb-base", "gold": "gold", "history": "clb-historical-candidates"}
 
 
@@ -103,11 +104,11 @@ def main():
         parser.error("Use a fresh run id or explicitly resume this run")
     os.chdir(output)
     candidates = {row["instance_id"]: row for row in map(
-        json.loads, (ROOT / "fixtures/historical_predictions.jsonl").read_text(encoding="utf-8").splitlines()
+        json.loads, (FIXTURES / "historical_predictions.jsonl").read_text(encoding="utf-8").splitlines()
     )}
     tasks = load_task_repo(ROOT, instance_ids=list(candidates))
-    provenance = {row["instance_id"]: row for row in read_json(ROOT / "fixtures/provenance.json")}
-    archived = read_json(ROOT / "fixtures/clb_grading.json")
+    provenance = {row["instance_id"]: row for row in read_json(FIXTURES / "provenance.json")}
+    archived = read_json(FIXTURES / "clb_grading.json")
     for name, row in candidates.items():
         if hashlib.sha256(row["model_patch"].encode()).hexdigest() != provenance[name]["candidate_sha256"]:
             raise RuntimeError(f"Historical patch changed: {name}")

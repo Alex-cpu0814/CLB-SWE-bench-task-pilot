@@ -9,7 +9,7 @@ from pathlib import Path
 from dockerfile_gen import render_files, validate_base_image
 
 
-ROOT = Path(__file__).resolve().parent
+ROOT = Path(__file__).resolve().parents[1]
 FROZEN_PILOT_IDS = {"clb-pyc-002", "clb-javac-093", "clb-javac-175"}
 TEST_KEYS = ("FAIL_TO_PASS", "PASS_TO_PASS")
 

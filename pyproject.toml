@@ -1,0 +1,21 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "clb-dockerfile-gen"
+version = "0.1.0"
+description = "Generate Dockerfile and eval.sh for CLB SWE-bench tasks"
+readme = "README.md"
+requires-python = ">=3.10"
+dynamic = ["dependencies"]
+
+[project.scripts]
+clb-dockerfile-gen = "dockerfile_gen.__main__:main"
+
+[tool.setuptools.packages.find]
+include = ["dockerfile_gen*"]
+namespaces = false
+
+[tool.setuptools.dynamic]
+dependencies = {file = ["requirements.txt"]}
