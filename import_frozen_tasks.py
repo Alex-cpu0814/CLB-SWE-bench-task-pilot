@@ -6,42 +6,12 @@ import json
 import re
 from pathlib import Path
 
+from dockerfile_gen import render_files, validate_base_image
+
 
 ROOT = Path(__file__).resolve().parent
 FROZEN_PILOT_IDS = {"clb-pyc-002", "clb-javac-093", "clb-javac-175"}
 TEST_KEYS = ("FAIL_TO_PASS", "PASS_TO_PASS")
-
-EVAL_SCRIPT = """#!/bin/bash
-set -uo pipefail
-ulimit -c 0
-
-fail() {
-    printf '%s\\n' '>>>>> Tests Errored' "$1" >&2
-    exit 2
-}
-
-cd /testbed || fail 'Cannot enter /testbed'
-[[ "$(git rev-parse HEAD)" == "@BASE@" ]] || fail 'Unexpected Base commit'
-source /benchmark/case_adapter.sh || fail 'Cannot load case adapter'
-git apply --whitespace=nowarn - <<'CLB_TEST_PATCH' || fail 'Test patch application failed'
-@TEST@
-CLB_TEST_PATCH
-
-mkdir -p /results || fail 'Cannot create test output directory'
-@MOUNTS@build_project || fail 'Project build failed'
-run_project_tests >/results/tests.raw.log 2>&1
-test_status=$?
-cat /results/tests.raw.log
-
-parser_python=$(command -v python || command -v python3 || command -v python2.7) \\
-    || fail 'Cannot find Python for test log conversion'
-printf '%s\\n' '>>>>> Start Test Output'
-PYTHONIOENCODING=utf-8 "$parser_python" /benchmark/format_test_log.py /results/tests.raw.log \\
-    || fail 'Cannot convert test output'
-(exit "$test_status")
-printf '%s\\n' '>>>>> End Test Output'
-exit "$test_status"
-"""
 
 FORMAT_LOG = """
 if __name__ == '__main__':
@@ -128,31 +98,6 @@ def task_files(row, record, dataset, evaluator_root, legacy_status_function, bas
     if row["base_commit"] != config["base_commit"] or any(grading[key] != tests[key] for key in TEST_KEYS):
         raise ValueError(f"Frozen data and evaluator disagree for {name}")
 
-    dockerfile = f"FROM {base_image}\nCOPY runtime/ /benchmark/\n"
-    if record["case"] == "javac_case_075":
-        dockerfile += "RUN ln -s /opt/clb-deps /benchmark/dependencies\n"
-    if record["case"] == "javac_case_200":
-        # The frozen checkout is owned by the image user, while the harness runs as root.
-        dockerfile += "USER root\nRUN git config --system --add safe.directory /testbed\n"
-    runner = case / "evaluator/run_evaluation.sh"
-    if runner.is_file():
-        # Reset/clean happens before the official harness applies the candidate.
-        clean = "-fdx -e bin" if "git clean -fdx -e bin" in runner.read_text(encoding="utf-8") else "-fdx"
-        dockerfile += f"RUN git -C /testbed clean {clean}\n"
-    mounts = ""
-    if record["case"] == "javac_case_170":
-        mounts = (
-            "mkdir -p /case-noexec /case-exec || fail 'Cannot create test mountpoints'\n"
-            "mount -t tmpfs -o rw,noexec,nosuid,size=64m tmpfs /case-noexec "
-            "|| fail 'Cannot create noexec test mount'\n"
-            "mount -t tmpfs -o rw,exec,nosuid,size=64m tmpfs /case-exec "
-            "|| fail 'Cannot create executable test mount'\n"
-        )
-    test_text = row["test_patch"].replace("\r\n", "\n").rstrip("\n")
-    if not test_text or "CLB_TEST_PATCH" in test_text.splitlines():
-        raise ValueError(f"Cannot embed test patch for {name}")
-    script = EVAL_SCRIPT.replace("@BASE@", row["base_commit"]).replace("@MOUNTS@", mounts)
-    script = script.replace("@TEST@", test_text)
     # The upstream Django parser preserves spaces inside test IDs.
     unittest_log = any(any(char.isspace() for char in node) for nodes in tests.values() for node in nodes)
     files = {
@@ -167,9 +112,8 @@ def task_files(row, record, dataset, evaluator_root, legacy_status_function, bas
         "problem_statement.md": row["problem_statement"].encode("utf-8"),
         "gold.patch": row["patch"].encode("utf-8"),
         "test.patch": row["test_patch"].encode("utf-8"),
-        "Dockerfile": dockerfile.encode("utf-8"),
+        **render_files(name, row["cohort"], row["base_commit"], base_image, row["test_patch"]),
         ".dockerignore": b"*\n!Dockerfile\n!runtime/\n!runtime/**\n",
-        "eval.sh": script.encode("utf-8"),
         "runtime/format_test_log.py": format_test_log(
             case / "evaluator/evaluate_model_patch.py", legacy_status_function, unittest_log
         ),
@@ -205,10 +149,10 @@ def main():
     if base_images.keys() != frozen_by_release.keys():
         parser.error("Base image manifest must cover every release instance")
     for name, reference in base_images.items():
-        slug = name.replace("__", "_1776_")
-        prefix = f"yutu0814/clb.base.x86_64.{slug}:latest@sha256:"
-        if not reference.startswith(prefix) or not re.fullmatch(r"[0-9a-f]{64}", reference[len(prefix):]):
-            parser.error(f"Invalid pinned Base image for {name}")
+        try:
+            validate_base_image(name, reference)
+        except ValueError as error:
+            parser.error(str(error))
     selected = {frozen_by_release.get(name, name) for name in args.instance or rows_by_id}
     if unknown := selected - rows_by_id.keys():
         parser.error(f"Unknown instances: {', '.join(sorted(unknown))}")
@@ -232,9 +176,7 @@ def main():
             metadata = read_json(metadata_path)
             if metadata.get("instance_id") != name or metadata.get("image") != evaluation_image(name):
                 parser.error(f"Incorrect pilot instance ID or image: {metadata_path}")
-            dockerfile = metadata_path.with_name("Dockerfile")
-            if not dockerfile.is_file() or not dockerfile.read_bytes().startswith(f"FROM {base_image}\n".encode()):
-                parser.error(f"Incorrect pilot Base image: {dockerfile}")
+            files.update(render_files(name, row["cohort"], row["base_commit"], base_image, row["test_patch"]))
         else:
             files = task_files(row, records[frozen_id], dataset, evaluator, status_function, base_image)
         for filename, expected in files.items():

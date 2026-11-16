@@ -21,7 +21,22 @@
 迁移后的日志转换沿用各题原有的测试状态解析逻辑。生成模型补丁时用冻结版题面和
 原 Base 镜像，评测运行所需的脚本及补丁由评测侧读取。
 
-`import_frozen_tasks.py` 从冻结发布目录导入三题试点之外的任务。维护者可在仓库根目录运行
+### 重新生成 Dockerfile 和 eval.sh
+
+安装 `requirements.txt` 后，在仓库根目录运行以下命令。生成器从 `task.yaml`、
+`test.patch` 和 `base-images.json` 读取输入。语言组合及个别题目的构建、测试规则位于 `dockerfile_gen/`，
+评测所用的辅助脚本由各题的 `runtime/` 提供。
+
+~~~bash
+# 检查全部 72 题的已生成文件
+python -m dockerfile_gen --check
+# 只生成指定任务，也可以多次传入 -i
+python -m dockerfile_gen -i scipy__scipy-clb-002
+# 重新生成全部任务
+python -m dockerfile_gen
+~~~
+
+`import_frozen_tasks.py` 用于从旧冻结发布目录导入三题试点之外的任务。维护者可运行
 `python import_frozen_tasks.py ../CLB-SWE-bench-v1 --check` 核对导入文件。
 
 ## 72 题迁移验证（原 Base 镜像）
