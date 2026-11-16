@@ -1,5 +1,7 @@
 """Generation settings for the two Java–C cohorts."""
 
+from .constants import CONTAINER_WORKDIR
+
 COHORTS = {"java_author11", "java_upstream11"}
 PILOT_NORMALIZERS = {
     "ninia__jep-clb-093": "python /opt/clb-pilot/normalize_results.py jep",
@@ -19,7 +21,7 @@ PRESERVE_BIN = {
 DOCKER_SETUP = {
     "lwjgl__lwjgl3-clb-075": "RUN ln -s /opt/clb-deps /benchmark/dependencies\n",
     # The checkout in this image belongs to the benchmark user.
-    "mdsplus__mdsplus-clb-200": "USER root\nRUN git config --system --add safe.directory /testbed\n",
+    "mdsplus__mdsplus-clb-200": f"USER root\nRUN git config --system --add safe.directory {CONTAINER_WORKDIR}\n",
 }
 
 EVAL_SETUP = {
