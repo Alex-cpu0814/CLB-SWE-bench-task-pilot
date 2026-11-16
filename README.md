@@ -130,3 +130,27 @@ swebench eval clb-local/CLB-SWE-bench-task-pilot --task-repo . \
 - `lwjgl__lwjgl3-clb-075` 的依赖移至 `/opt/clb-deps`。Dockerfile 将这个目录链接到构建器使用的原路径。复测 Base 和 Gold 后，目标与回归测试结果均与归档计数一致。
 - `kohlschutter__junixsocket-clb-160` 的 Gold 在并行运行时触发 Maven 超时，串行复测通过。
 - `pygobject__pycairo-clb-139` 的三项回归测试均通过，目标测试触发进程中止，退出码为 134。旧镜像有两次相同记录，冻结汇总采用的是目标测试报告 `FAILED`、退出码为 1 的一次运行。两种情况下 SWE-bench 对 Base 的判分均为未解决，Gold 通过全部四项测试。
+
+### 从空构建缓存复现
+
+从 GitHub 克隆 `4134aacc5c0f0b2cfc4c6751fb72cadf54685be3` 后，匿名查询 Docker Registry，
+72 个固定镜像摘要均可访问。在同一台机器上新建 BuildKit 构建器，初始缓存为 `0B`。
+从 Docker Hub 拉取镜像层并构建了下列三题，六次 Base／Gold 对照的判分和逐项测试状态均与归档一致。
+SciPy 的一个镜像层首次下载停滞，重试后完成。
+
+按[三题对照](#三题对照)安装依赖并检查数据后，可用以下命令在新构建器中复现。
+构建出的镜像载入 Docker，供 `verify_pilot.py` 运行 Base、Gold 和历史候选补丁。
+
+~~~bash
+docker buildx create --name clb-repro --driver docker-container
+docker buildx inspect clb-repro --bootstrap
+docker buildx du --builder clb-repro
+swebench dataset build . -o scratch/dataset
+for id in scipy__scipy-clb-002 ninia__jep-clb-093 kohlschutter__junixsocket-clb-175; do
+  task="tasks/$id"
+  image="swebench/sweb.eval.x86_64.${id/__/_1776_}:latest"
+  docker buildx build --builder clb-repro --platform linux/amd64 \
+    --pull --no-cache --load --file "$task/Dockerfile" --tag "$image" "$task" || exit 1
+done
+python verify_pilot.py --output scratch --run-id clb-clean-repro
+~~~
