@@ -7,6 +7,7 @@ import re
 from pathlib import Path
 
 from dockerfile_gen import render_files, validate_base_image
+from dockerfile_gen.tasks import load_base_images
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -145,7 +146,7 @@ def main():
     frozen_by_release = {release_instance_id(row): row["instance_id"] for row in rows}
     if len(frozen_by_release) != len(rows):
         parser.error("Release instance IDs must be unique")
-    base_images = read_json(ROOT / "base-images.json")
+    base_images = load_base_images(ROOT)
     if base_images.keys() != frozen_by_release.keys():
         parser.error("Base image manifest must cover every release instance")
     for name, reference in base_images.items():

@@ -8,14 +8,14 @@ version = "0.1.0"
 description = "Generate Dockerfile and eval.sh for CLB SWE-bench tasks"
 readme = "README.md"
 requires-python = ">=3.10"
-dynamic = ["dependencies"]
+dependencies = [
+    "swebench @ git+https://github.com/SWE-bench/SWE-bench.git@02e7a74ffd0b707aab73d203fe87bdc7c76afc8e",
+]
 
 [project.scripts]
+dockerfile-gen = "dockerfile_gen.__main__:main"
 clb-dockerfile-gen = "dockerfile_gen.__main__:main"
 
 [tool.setuptools.packages.find]
 include = ["dockerfile_gen*"]
 namespaces = false
-
-[tool.setuptools.dynamic]
-dependencies = {file = ["requirements.txt"]}

@@ -11,12 +11,13 @@ from .tasks import plan_updates, write_generated
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("task_repo", nargs="?", default=Path.cwd(), type=Path)
-    parser.add_argument("-i", "--instance", action="append", help="Select tasks by instance ID (repeatable)")
+    parser.add_argument("--instance_ids", nargs="+", default=[], help="Select tasks by instance ID")
+    parser.add_argument("-i", "--instance", action="append", default=[], help="Select one instance (repeatable)")
     parser.add_argument("--check", action="store_true", help="Report missing or stale generated files")
     args = parser.parse_args()
 
     try:
-        task_count, updates = plan_updates(args.task_repo, args.instance)
+        task_count, updates = plan_updates(args.task_repo, args.instance_ids + args.instance)
     except (OSError, KeyError, ValueError, YAMLError) as exc:
         parser.error(str(exc))
 

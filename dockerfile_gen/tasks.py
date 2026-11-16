@@ -8,10 +8,20 @@ from swebench.task.repo import load_yaml, task_dirs
 from . import render_files
 
 
+def load_base_images(task_repo: Path) -> dict[str, str]:
+    manifest = task_repo / "dockerfile_gen" / "data" / "base-images.json"
+    try:
+        contents = manifest.read_bytes()
+    except FileNotFoundError:
+        # Older task checkouts put the manifest at the repository root.
+        contents = (task_repo / "base-images.json").read_bytes()
+    return json.loads(contents)
+
+
 def plan_updates(task_repo: Path, instance_ids: list[str] | None) -> tuple[int, dict[Path, bytes]]:
     """Return the number of selected tasks and the files that need to be written."""
     tasks = {path.name: path for path in task_dirs(task_repo)}
-    references = json.loads((task_repo / "base-images.json").read_bytes())
+    references = load_base_images(task_repo)
     if not tasks or tasks.keys() != references.keys():
         raise ValueError("Task directories and the Base image manifest must cover the same instances")
     selected = sorted(set(instance_ids or tasks))

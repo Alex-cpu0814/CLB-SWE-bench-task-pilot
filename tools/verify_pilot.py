@@ -94,7 +94,7 @@ def main():
     parser.add_argument("--resume", action="store_true", help="Reuse reports from this specific pilot run")
     args = parser.parse_args()
     if __version__ != "5.0.2":
-        parser.error("Install the pinned SWE-bench revision in requirements.txt")
+        parser.error("Run python -m pip install -e . to install the pinned SWE-bench version")
     if not args.run_id.isascii() or not args.run_id.replace("-", "").isalnum():
         parser.error("Use a run id with ASCII letters, digits, and hyphens")
     output = args.output.resolve()
