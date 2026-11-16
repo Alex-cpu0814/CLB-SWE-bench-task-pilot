@@ -1,5 +1,16 @@
 # CLB 验证记录
 
+## 按项目整理生成器
+
+使用固定版本的 SWE-bench 5.0.2 重建 72 个评测镜像，对照迁移前每题的 Base 和 Gold 结果。
+72 个 Base 均未解决，72 个 Gold 均通过，逐项测试状态和退出码与原记录一致。
+镜像内的 209 份评测辅助文件与原文件一致，其中 junixsocket 170 的测试列表由 CRLF 写成 LF。
+导出的 72 条数据与已发布的 Parquet 逐字段一致。
+
+首轮并行运行时，junixsocket 160 的 Gold 触发了已有的 15 秒 Maven 超时。
+SciPy 041 的 Base 在相同的目标测试崩溃，首轮退出码为 139，原记录为 134。
+串行复跑这两题后，判分、逐项测试状态和退出码均与原记录一致。
+
 ## 72 题迁移验证（原 Base 镜像）
 
 官方 `swebench dataset check .` 和 `swebench dataset build .` 已通过。按新旧 ID 对照表核对后，
@@ -70,7 +81,7 @@ Python 镜像需要兼容 Python 2.7 的日志转换。`ultrajson__ultrajson-clb
 SciPy 的一个镜像层首次下载停滞，重试后完成。
 
 按[快速开始](../README.md#快速开始)安装依赖并检查数据后，可用以下命令在新构建器中复现。
-构建出的镜像载入 Docker，供 `tools/verify_pilot.py` 运行 Base、Gold 和历史候选补丁。
+构建出的镜像载入 Docker，供 `tools/archive/verify_pilot.py` 运行 Base、Gold 和历史候选补丁。
 
 ~~~bash
 docker buildx create --name clb-repro --driver docker-container
@@ -83,5 +94,5 @@ for id in scipy__scipy-clb-002 ninia__jep-clb-093 kohlschutter__junixsocket-clb-
   docker buildx build --builder clb-repro --platform linux/amd64 \
     --pull --no-cache --load --file "$task/Dockerfile" --tag "$image" "$task" || exit 1
 done
-python tools/verify_pilot.py --output scratch --run-id clb-clean-repro
+python tools/archive/verify_pilot.py --output scratch --run-id clb-clean-repro
 ~~~

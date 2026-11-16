@@ -25,8 +25,8 @@ dockerfile-gen --check
 
 `dockerfile-gen` 会重新生成所有任务的 `Dockerfile` 和 `eval.sh`。可用
 `dockerfile-gen --instance_ids scipy__scipy-clb-002` 只生成指定任务。
-生成器使用按 SHA-256 固定的 Base 镜像，构建时从各题的 `runtime/` 加载评测辅助脚本。
-[Base 镜像清单](dockerfile_gen/data/base-images.json)
+生成器从 Python–C、Java–C 配置和共享辅助文件生成完整的评测 Dockerfile。构建时需要 Docker Buildx，
+并使用按 SHA-256 固定的 Base 镜像。[生成器](dockerfile_gen/) · [Base 镜像清单](dockerfile_gen/data/base-images.json)
 
 ## 评测
 

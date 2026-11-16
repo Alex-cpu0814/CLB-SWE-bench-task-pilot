@@ -19,3 +19,6 @@ clb-dockerfile-gen = "dockerfile_gen.__main__:main"
 [tool.setuptools.packages.find]
 include = ["dockerfile_gen*"]
 namespaces = false
+
+[tool.setuptools.package-data]
+dockerfile_gen = ["fixtures/**/*"]

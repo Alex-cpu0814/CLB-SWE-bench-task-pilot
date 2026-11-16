@@ -1,4 +1,4 @@
 * text=auto eol=lf
 *.patch -text
 problem_statement.md -text
-tasks/*/runtime/*.json -text
+dockerfile_gen/fixtures/**/*.json -text

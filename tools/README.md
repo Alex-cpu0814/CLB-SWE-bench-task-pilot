@@ -3,6 +3,13 @@
 以下命令从任务仓库根目录运行。依赖安装见[仓库首页](../README.md#安装和生成)。
 原有的 `clb-dockerfile-gen` 和 `python -m dockerfile_gen` 也可以调用生成器。
 
+## 更新构建或测试命令
+
+在 `python_c.py` 或 `java_c.py` 修改项目共用的构建步骤、个别题的构建配置或测试命令。
+可共用的辅助文件放在 `dockerfile_gen/fixtures/`。运行 `dockerfile-gen --instance_ids <instance_id>`
+重新生成对应题目的 `Dockerfile` 和 `eval.sh`，运行 `dockerfile-gen --check` 检查全部任务。
+[Python–C 配置](../dockerfile_gen/python_c.py) · [Java–C 配置](../dockerfile_gen/java_c.py)
+
 ## 导出数据
 
 ~~~bash
@@ -14,26 +21,5 @@ cp docs/dataset-card.md scratch/dataset/CLB-SWE-bench/README.md
 输出目录 `scratch/dataset/CLB-SWE-bench/` 包含 `test.parquet`、发布用的
 `eval.yaml` 和数据集卡片。[评测配置](../eval/CLB-SWE-bench.yaml) · [数据集卡片](../docs/dataset-card.md)
 
-## 复测历史结果
-
-先构建三题的评测镜像，再运行 Base、Gold 和历史模型补丁对照。
-
-~~~bash
-swebench images build . --namespace swebench -j 1 \
-  -i scipy__scipy-clb-002 -i ninia__jep-clb-093 -i kohlschutter__junixsocket-clb-175
-python tools/verify_pilot.py --output scratch --run-id clb-pilot
-~~~
-
-结果写入 `scratch/clb-pilot-comparison.json`。要开始新的复测，请使用新的 `--run-id`。
-中断后可用原 `--run-id` 加 `--resume` 继续。同一组镜像的构建和对照依次执行，构建会更新标签。
-历史候选的来源、镜像版本和补丁哈希见[复测记录](fixtures/provenance.json)。
-
-## 核对旧数据迁移
-
-持有旧冻结发布仓库的维护者可用下面的命令核对导入文件。
-
-~~~bash
-python tools/import_frozen_tasks.py ../CLB-SWE-bench-v1 --check
-~~~
-
-CLB 实例 ID 采用 `<owner>__<repo>-clb-<原案例号>`。历史结果可通过[新旧 ID 对照表](fixtures/instance-id-map.tsv)查找。
+旧版迁移和三题历史复测见[归档说明](archive/README.md)。
+CLB 实例 ID 采用 `<owner>__<repo>-clb-<原案例号>`。历史结果可通过[新旧 ID 对照表](archive/fixtures/instance-id-map.tsv)查找。

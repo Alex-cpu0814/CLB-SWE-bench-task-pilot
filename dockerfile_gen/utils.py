@@ -2,6 +2,8 @@
 
 import re
 
+from swebench.utils import generate_heredoc_delimiter
+
 from .constants import TEST_PATCH_DELIMITER
 
 
@@ -18,3 +20,11 @@ def prepare_test_patch(instance_id: str, test_patch: str) -> str:
     if not test or TEST_PATCH_DELIMITER in test.splitlines():
         raise ValueError(f"Cannot embed test patch for {instance_id}")
     return test
+
+
+def copy_inline(content: str, target: str) -> str:
+    """Add a literal file to the Dockerfile without a companion build-context file."""
+    if not content.endswith("\n"):
+        raise ValueError(f"Inline Dockerfile content must end with a newline: {target}")
+    delimiter = generate_heredoc_delimiter(content)
+    return f"\nCOPY --chmod=0644 <<'{delimiter}' {target}\n{content}{delimiter}\n"
