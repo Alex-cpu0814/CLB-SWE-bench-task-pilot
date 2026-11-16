@@ -1,0 +1,14 @@
+{
+  "instance_id": "tskit-dev__tskit-clb-046",
+  "repo": "tskit-dev/tskit",
+  "base_commit": "eb8b4aebe42f39f7e536a603e8cd25d9cf104e22",
+  "version": "clb-v1-pilot",
+  "split": "test",
+  "datasets": [
+    "clb-local/CLB-SWE-bench-task-pilot"
+  ],
+  "cohort": "python50",
+  "image": "swebench/sweb.eval.x86_64.tskit-dev_1776_tskit-clb-046:latest",
+  "log_parser": "parse_log_pytest_v2",
+  "eval_type": "pass_and_fail"
+}

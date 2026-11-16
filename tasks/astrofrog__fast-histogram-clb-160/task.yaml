@@ -1,0 +1,14 @@
+{
+  "instance_id": "astrofrog__fast-histogram-clb-160",
+  "repo": "astrofrog/fast-histogram",
+  "base_commit": "76b6f57a27f31cdefc23444f91611a00c9b4332d",
+  "version": "clb-v1-pilot",
+  "split": "test",
+  "datasets": [
+    "clb-local/CLB-SWE-bench-task-pilot"
+  ],
+  "cohort": "python50",
+  "image": "swebench/sweb.eval.x86_64.astrofrog_1776_fast-histogram-clb-160:latest",
+  "log_parser": "parse_log_pytest_v2",
+  "eval_type": "pass_and_fail"
+}

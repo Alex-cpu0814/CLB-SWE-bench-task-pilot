@@ -1,0 +1,2 @@
+FROM yutu0814/pyc-case-137-pycairo@sha256:b4603765359d41448fa3d87f060d41236f069e73bc953b52ab072d8783418944
+COPY runtime/ /benchmark/

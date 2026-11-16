@@ -1,0 +1,8 @@
+{
+  "FAIL_TO_PASS": [
+    "org.lwjgl.system.PointerInitializationProbe::allocatorSelection"
+  ],
+  "PASS_TO_PASS": [
+    "org.lwjgl.system.PointerInitializationProbe::pointerWidth"
+  ]
+}

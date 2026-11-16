@@ -1,0 +1,14 @@
+{
+  "instance_id": "pygame__pygame-clb-094",
+  "repo": "pygame/pygame",
+  "base_commit": "2d7786bc2453561a696281299104f95814e676b3",
+  "version": "clb-v1-pilot",
+  "split": "test",
+  "datasets": [
+    "clb-local/CLB-SWE-bench-task-pilot"
+  ],
+  "cohort": "python50",
+  "image": "swebench/sweb.eval.x86_64.pygame_1776_pygame-clb-094:latest",
+  "log_parser": "parse_log_pytest_v2",
+  "eval_type": "pass_and_fail"
+}

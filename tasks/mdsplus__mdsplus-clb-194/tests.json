@@ -1,0 +1,8 @@
+{
+  "FAIL_TO_PASS": [
+    "MDSplus.tditest.test-treeshr"
+  ],
+  "PASS_TO_PASS": [
+    "MDSplus.tditest.test-tdishr"
+  ]
+}

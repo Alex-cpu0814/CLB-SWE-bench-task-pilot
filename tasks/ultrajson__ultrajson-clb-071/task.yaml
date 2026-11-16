@@ -1,0 +1,14 @@
+{
+  "instance_id": "ultrajson__ultrajson-clb-071",
+  "repo": "ultrajson/ultrajson",
+  "base_commit": "f26f9679f1b9d7fa2d0488e1e7b1256d9391a85f",
+  "version": "clb-v1-pilot",
+  "split": "test",
+  "datasets": [
+    "clb-local/CLB-SWE-bench-task-pilot"
+  ],
+  "cohort": "python50",
+  "image": "swebench/sweb.eval.x86_64.ultrajson_1776_ultrajson-clb-071:latest",
+  "log_parser": "parse_log_django",
+  "eval_type": "pass_and_fail"
+}

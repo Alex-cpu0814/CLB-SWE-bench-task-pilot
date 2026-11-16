@@ -1,0 +1,14 @@
+{
+  "instance_id": "pygobject__pycairo-clb-141",
+  "repo": "pygobject/pycairo",
+  "base_commit": "eeea4de31f9c8f4496f5695ee0258040b401f0b4",
+  "version": "clb-v1-pilot",
+  "split": "test",
+  "datasets": [
+    "clb-local/CLB-SWE-bench-task-pilot"
+  ],
+  "cohort": "python50",
+  "image": "swebench/sweb.eval.x86_64.pygobject_1776_pycairo-clb-141:latest",
+  "log_parser": "parse_log_pytest_v2",
+  "eval_type": "pass_and_fail"
+}

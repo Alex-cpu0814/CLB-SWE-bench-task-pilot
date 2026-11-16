@@ -1,0 +1,14 @@
+{
+  "instance_id": "spglib__spglib-clb-175",
+  "repo": "spglib/spglib",
+  "base_commit": "4afa84322f83b368dada7e3c6f64c3a17114aaa0",
+  "version": "clb-v1-pilot",
+  "split": "test",
+  "datasets": [
+    "clb-local/CLB-SWE-bench-task-pilot"
+  ],
+  "cohort": "python50",
+  "image": "swebench/sweb.eval.x86_64.spglib_1776_spglib-clb-175:latest",
+  "log_parser": "parse_log_pytest_v2",
+  "eval_type": "pass_and_fail"
+}

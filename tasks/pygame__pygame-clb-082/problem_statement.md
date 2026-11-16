@@ -1,0 +1,1 @@
+event.get(type) should return posted matching events without a TypeError; peek() on an empty queue should be false. Existing get and populated peek behavior should remain correct.

@@ -1,0 +1,14 @@
+{
+  "instance_id": "mdsplus__mdsplus-clb-200",
+  "repo": "MDSplus/mdsplus",
+  "base_commit": "f6c82e695f5b6964daeec2c4e0bc449a89be892a",
+  "version": "clb-v1-pilot",
+  "split": "test",
+  "datasets": [
+    "clb-local/CLB-SWE-bench-task-pilot"
+  ],
+  "cohort": "java_upstream11",
+  "image": "swebench/sweb.eval.x86_64.mdsplus_1776_mdsplus-clb-200:latest",
+  "log_parser": "parse_log_pytest_v2",
+  "eval_type": "pass_and_fail"
+}

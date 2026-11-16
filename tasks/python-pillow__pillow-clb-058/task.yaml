@@ -1,0 +1,14 @@
+{
+  "instance_id": "python-pillow__pillow-clb-058",
+  "repo": "python-pillow/Pillow",
+  "base_commit": "b21508798ab548ed90eb4d6bf01db14b880c9c91",
+  "version": "clb-v1-pilot",
+  "split": "test",
+  "datasets": [
+    "clb-local/CLB-SWE-bench-task-pilot"
+  ],
+  "cohort": "python50",
+  "image": "swebench/sweb.eval.x86_64.python-pillow_1776_pillow-clb-058:latest",
+  "log_parser": "parse_log_pytest_v2",
+  "eval_type": "pass_and_fail"
+}

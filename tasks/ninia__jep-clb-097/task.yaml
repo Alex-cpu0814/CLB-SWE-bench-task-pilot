@@ -1,0 +1,14 @@
+{
+  "instance_id": "ninia__jep-clb-097",
+  "repo": "ninia/jep",
+  "base_commit": "e4f13ea277ce4809688dde766cc9fd173ec6f63d",
+  "version": "clb-v1-pilot",
+  "split": "test",
+  "datasets": [
+    "clb-local/CLB-SWE-bench-task-pilot"
+  ],
+  "cohort": "java_author11",
+  "image": "swebench/sweb.eval.x86_64.ninia_1776_jep-clb-097:latest",
+  "log_parser": "parse_log_pytest_v2",
+  "eval_type": "pass_and_fail"
+}

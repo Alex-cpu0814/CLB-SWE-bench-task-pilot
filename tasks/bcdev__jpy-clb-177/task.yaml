@@ -1,0 +1,14 @@
+{
+  "instance_id": "bcdev__jpy-clb-177",
+  "repo": "bcdev/jpy",
+  "base_commit": "7e58cea7c2551d0b590eff3959341ee823ec43c1",
+  "version": "clb-v1-pilot",
+  "split": "test",
+  "datasets": [
+    "clb-local/CLB-SWE-bench-task-pilot"
+  ],
+  "cohort": "python50",
+  "image": "swebench/sweb.eval.x86_64.bcdev_1776_jpy-clb-177:latest",
+  "log_parser": "parse_log_pytest_v2",
+  "eval_type": "pass_and_fail"
+}

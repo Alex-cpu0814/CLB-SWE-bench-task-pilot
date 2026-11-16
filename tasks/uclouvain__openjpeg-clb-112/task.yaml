@@ -1,0 +1,14 @@
+{
+  "instance_id": "uclouvain__openjpeg-clb-112",
+  "repo": "uclouvain/openjpeg",
+  "base_commit": "4f5ec07c315872bdee0885be085ebf57cede2db9",
+  "version": "clb-v1-pilot",
+  "split": "test",
+  "datasets": [
+    "clb-local/CLB-SWE-bench-task-pilot"
+  ],
+  "cohort": "java_upstream11",
+  "image": "swebench/sweb.eval.x86_64.uclouvain_1776_openjpeg-clb-112:latest",
+  "log_parser": "parse_log_pytest_v2",
+  "eval_type": "pass_and_fail"
+}

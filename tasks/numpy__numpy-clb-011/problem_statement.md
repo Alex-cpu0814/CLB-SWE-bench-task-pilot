@@ -1,0 +1,1 @@
+ndarray.searchsorted documents its required value argument as v, but the C method parser exposes the keyword as keys. Calling searchsorted(v=...) therefore raises a TypeError instead of accepting the documented keyword.

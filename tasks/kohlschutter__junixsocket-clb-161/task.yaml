@@ -1,0 +1,14 @@
+{
+  "instance_id": "kohlschutter__junixsocket-clb-161",
+  "repo": "kohlschutter/junixsocket",
+  "base_commit": "1df1513c64079a5100cdc2a372558e1f77849c0f",
+  "version": "clb-v1-pilot",
+  "split": "test",
+  "datasets": [
+    "clb-local/CLB-SWE-bench-task-pilot"
+  ],
+  "cohort": "java_upstream11",
+  "image": "swebench/sweb.eval.x86_64.kohlschutter_1776_junixsocket-clb-161:latest",
+  "log_parser": "parse_log_pytest_v2",
+  "eval_type": "pass_and_fail"
+}

@@ -1,0 +1,14 @@
+{
+  "instance_id": "ghaering__pysqlite-clb-156",
+  "repo": "ghaering/pysqlite",
+  "base_commit": "d7c44a6b62ccf27ae2a006d32dc25cd49ca45320",
+  "version": "clb-v1-pilot",
+  "split": "test",
+  "datasets": [
+    "clb-local/CLB-SWE-bench-task-pilot"
+  ],
+  "cohort": "python50",
+  "image": "swebench/sweb.eval.x86_64.ghaering_1776_pysqlite-clb-156:latest",
+  "log_parser": "parse_log_pytest_v2",
+  "eval_type": "pass_and_fail"
+}

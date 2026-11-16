@@ -1,0 +1,1 @@
+NumPy's array-allocation failure path raises _ArrayMemoryError and returns immediately, bypassing the common failure cleanup and leaking dtype references on every failed allocation. Route this path through the shared cleanup while preserving the formatted allocation error.

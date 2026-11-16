@@ -1,0 +1,14 @@
+{
+  "instance_id": "scipy__scipy-clb-044",
+  "repo": "scipy/scipy",
+  "base_commit": "fc6b387bc0c51b5b252712584580b4f0975498fb",
+  "version": "clb-v1-pilot",
+  "split": "test",
+  "datasets": [
+    "clb-local/CLB-SWE-bench-task-pilot"
+  ],
+  "cohort": "python50",
+  "image": "swebench/sweb.eval.x86_64.scipy_1776_scipy-clb-044:latest",
+  "log_parser": "parse_log_pytest_v2",
+  "eval_type": "pass_and_fail"
+}

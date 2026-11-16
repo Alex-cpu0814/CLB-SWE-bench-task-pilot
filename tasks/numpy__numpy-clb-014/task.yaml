@@ -1,0 +1,14 @@
+{
+  "instance_id": "numpy__numpy-clb-014",
+  "repo": "numpy/numpy",
+  "base_commit": "495d352bf325f44d78001f059d625123e49f027e",
+  "version": "clb-v1-pilot",
+  "split": "test",
+  "datasets": [
+    "clb-local/CLB-SWE-bench-task-pilot"
+  ],
+  "cohort": "python50",
+  "image": "swebench/sweb.eval.x86_64.numpy_1776_numpy-clb-014:latest",
+  "log_parser": "parse_log_pytest_v2",
+  "eval_type": "pass_and_fail"
+}

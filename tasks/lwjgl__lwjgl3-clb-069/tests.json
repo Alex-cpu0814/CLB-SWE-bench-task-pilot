@@ -1,0 +1,8 @@
+{
+  "FAIL_TO_PASS": [
+    "org.lwjgl.system.MemoryUtilTest.testTextDecoding"
+  ],
+  "PASS_TO_PASS": [
+    "org.lwjgl.system.MemoryUtilTest.testUTF8"
+  ]
+}

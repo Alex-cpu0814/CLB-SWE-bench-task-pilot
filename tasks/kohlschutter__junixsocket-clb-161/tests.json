@@ -1,0 +1,8 @@
+{
+  "FAIL_TO_PASS": [
+    "org.newsclub.net.unix.SoTimeoutTest.testSocketTimeoutException"
+  ],
+  "PASS_TO_PASS": [
+    "org.newsclub.net.unix.SoTimeoutTest.issue14Pass"
+  ]
+}

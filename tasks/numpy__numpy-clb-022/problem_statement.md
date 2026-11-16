@@ -1,0 +1,1 @@
+Creating an array from an object with an invalid __array_interface__ can corrupt the reference count of the cached dtype object on failure paths. Invalid shape or strides metadata should raise the expected exception without decreasing the global dtype reference count or triggering CPython reference-count errors.

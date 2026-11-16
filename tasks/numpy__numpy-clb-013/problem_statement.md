@@ -1,0 +1,1 @@
+numpy.ravel_multi_index does not reject non-empty indices when one dimension is zero. Depending on mode, Base returns without the required ValueError or performs division by zero and terminates with SIGFPE. Empty index arrays must remain valid.

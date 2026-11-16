@@ -1,0 +1,1 @@
+JPEG Adobe APP14 color-transform metadata should use the twelfth payload byte. RGB and CMYK samples should report transforms 1 and 2; a shortened APP14 payload should retain Adobe metadata without inventing an absent transform value. Normal JPEG decoding and CMYK roundtripping should remain correct.

@@ -1,6 +1,6 @@
 [
   {
-    "instance_id": "clb-pyc-002",
+    "instance_id": "scipy__scipy-clb-002",
     "case": "case002",
     "cohort": "python50",
     "original_base_image": "yutu0814/pyc-case-002-scipy@sha256:a06dba0866df6cc6a1b517fb2516808a1afb412e1ced4adb6fec3518c33cc617",
@@ -10,7 +10,7 @@
     "source_expected_outcome": "unresolved"
   },
   {
-    "instance_id": "clb-javac-093",
+    "instance_id": "ninia__jep-clb-093",
     "case": "javac_case_093",
     "cohort": "java_author11",
     "original_base_image": "yutu0814/javac-case-093-jep@sha256:acc01f758d28a94ab99d3e35eeaee06bd65f9a119daf4b2522e469c6994e3942",
@@ -20,7 +20,7 @@
     "source_expected_outcome": "resolved"
   },
   {
-    "instance_id": "clb-javac-175",
+    "instance_id": "kohlschutter__junixsocket-clb-175",
     "case": "javac_case_175",
     "cohort": "java_upstream11",
     "original_base_image": "yutu0814/javac-case-175-junixsocket@sha256:d5eaaed040c90536d22f0ef5548ad00d2ec61b59e698d725014695479df8a20d",

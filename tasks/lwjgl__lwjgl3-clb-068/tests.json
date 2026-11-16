@@ -1,0 +1,8 @@
+{
+  "FAIL_TO_PASS": [
+    "org.lwjgl.openvr.VRCompositorNullGamePoseTest::nullGamePose"
+  ],
+  "PASS_TO_PASS": [
+    "org.lwjgl.openvr.VRCompositorNullGamePoseTest::nonNullGamePose"
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "instance_id": "lwjgl__lwjgl3-clb-068",
+  "repo": "LWJGL/lwjgl3",
+  "base_commit": "2c007161cff7ba12023ae48dd28a7856c0c6da3d",
+  "version": "clb-v1-pilot",
+  "split": "test",
+  "datasets": [
+    "clb-local/CLB-SWE-bench-task-pilot"
+  ],
+  "cohort": "java_author11",
+  "image": "swebench/sweb.eval.x86_64.lwjgl_1776_lwjgl3-clb-068:latest",
+  "log_parser": "parse_log_pytest_v2",
+  "eval_type": "pass_and_fail"
+}

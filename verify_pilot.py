@@ -58,7 +58,7 @@ def collect(root, prefix, phase, tasks, provenance, archived):
         )
         # The archived Jep Base control aborts during embedded CPython initialization.
         # Require the historical heap-corruption signature as well as the abort code.
-        known_base_abort = (phase == "base" and name == "clb-javac-093"
+        known_base_abort = (phase == "base" and name == "ninia__jep-clb-093"
                             and test_exit_code == 134 and "free(): invalid next size" in log_text)
         original = archived[name][phase]
         differences = {
@@ -102,10 +102,10 @@ def main():
                                for phase in CONTROL_MODELS):
         parser.error("Use a fresh run id or explicitly resume this run")
     os.chdir(output)
-    tasks = load_task_repo(ROOT)
     candidates = {row["instance_id"]: row for row in map(
         json.loads, (ROOT / "fixtures/historical_predictions.jsonl").read_text(encoding="utf-8").splitlines()
     )}
+    tasks = load_task_repo(ROOT, instance_ids=list(candidates))
     provenance = {row["instance_id"]: row for row in read_json(ROOT / "fixtures/provenance.json")}
     archived = read_json(ROOT / "fixtures/clb_grading.json")
     for name, row in candidates.items():

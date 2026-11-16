@@ -1,5 +1,5 @@
 {
-  "clb-pyc-002": {
+  "scipy__scipy-clb-002": {
     "base": {
       "source": "pyc-swebench/Y_test_data/pyc_case_002/verification/runs/case-002-final-negative/grading.json",
       "FAIL_TO_PASS": {
@@ -448,7 +448,7 @@
       }
     }
   },
-  "clb-javac-093": {
+  "ninia__jep-clb-093": {
     "base": {
       "source": "javac-swebench/N_test_data/javac_case_093/verification/runs/demo-093-negative/grading.json",
       "FAIL_TO_PASS": {
@@ -864,7 +864,7 @@
       }
     }
   },
-  "clb-javac-175": {
+  "kohlschutter__junixsocket-clb-175": {
     "base": {
       "source": "javac-swebench/Y_test_data/javac_case_175/verification/runs/case-175-base-1/grading.json",
       "FAIL_TO_PASS": {

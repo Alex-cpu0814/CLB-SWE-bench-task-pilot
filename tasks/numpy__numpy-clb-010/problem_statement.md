@@ -1,0 +1,1 @@
+Several ndarray methods return a newly converted Python/NumPy scalar when a caller supplies a zero-dimensional out array. They must return the exact out object by identity, consistently with higher-dimensional outputs.
