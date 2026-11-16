@@ -1,6 +1,6 @@
 {
   "datasets": [
-    "clb-local/CLB-SWE-bench-task-pilot"
+    "Alex-cpu0814/CLB-SWE-bench"
   ],
   "splits": [
     "test"

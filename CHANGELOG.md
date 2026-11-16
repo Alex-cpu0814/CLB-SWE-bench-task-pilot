@@ -2,6 +2,8 @@
 
 ## 未发布
 
+- 将 72 题的数据集标识设为 `Alex-cpu0814/CLB-SWE-bench`。
+- 新增官方格式的 `eval/` 描述文件和 Hugging Face 数据集卡片。官方导出命令会随 Parquet 导出 `eval.yaml`。
 - 新增 `clb-dockerfile-gen` 可安装命令，`python -m dockerfile_gen` 继续可用。
 - 将导入工具、复测工具及历史候选材料放到 `tools/`，把验证与题面审核记录移到 `docs/`。
 

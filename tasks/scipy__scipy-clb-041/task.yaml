@@ -5,7 +5,7 @@
   "version": "clb-v1-pilot",
   "split": "test",
   "datasets": [
-    "clb-local/CLB-SWE-bench-task-pilot"
+    "Alex-cpu0814/CLB-SWE-bench"
   ],
   "cohort": "python50",
   "image": "swebench/sweb.eval.x86_64.scipy_1776_scipy-clb-041:latest",

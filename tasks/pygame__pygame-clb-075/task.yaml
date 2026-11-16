@@ -5,7 +5,7 @@
   "version": "clb-v1-pilot",
   "split": "test",
   "datasets": [
-    "clb-local/CLB-SWE-bench-task-pilot"
+    "Alex-cpu0814/CLB-SWE-bench"
   ],
   "cohort": "python50",
   "image": "swebench/sweb.eval.x86_64.pygame_1776_pygame-clb-075:latest",

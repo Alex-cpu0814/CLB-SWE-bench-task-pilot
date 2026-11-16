@@ -26,7 +26,7 @@ swebench dataset build . -o scratch/dataset
 用官方评测器构建三道代表题并验证 Gold。三题分别来自 Python–C、Java–C 作者测试、Java–C 上游测试。
 
 ~~~bash
-swebench eval clb-local/CLB-SWE-bench-task-pilot --task-repo . --gold \
+swebench eval Alex-cpu0814/CLB-SWE-bench --task-repo . --gold \
   -i scipy__scipy-clb-002 -i ninia__jep-clb-093 -i kohlschutter__junixsocket-clb-175 \
   --run-id clb-pilot-gold -j 1
 ~~~
@@ -35,6 +35,20 @@ swebench eval clb-local/CLB-SWE-bench-task-pilot --task-repo . --gold \
 `instance_id`、`model_name_or_path` 和 `model_patch`，其中 `model_patch` 是统一 diff 文本。
 删除示例中的三个 `-i` 可评测预测文件中提交的任务。用于生成模型补丁的容器只需题面和对应 Base，
 测试资产由评测侧加载。
+
+## 数据导出与评测配置
+
+`swebench dataset build . -o scratch/dataset` 会生成 `test.parquet`，并将
+[评测配置](eval/CLB-SWE-bench.yaml)复制为 `eval.yaml`。两个文件位于
+`scratch/dataset/CLB-SWE-bench/`。如需准备 Hugging Face 数据集目录，可将
+[数据集卡片](docs/dataset-card.md)放到同一目录。
+
+~~~bash
+cp docs/dataset-card.md scratch/dataset/CLB-SWE-bench/README.md
+~~~
+
+数据集 ID 为 `Alex-cpu0814/CLB-SWE-bench`。评测命令使用 `--task-repo .` 从任务仓库
+读取测试并现场构建所选题目的评测镜像。
 
 ## 任务与生成器
 

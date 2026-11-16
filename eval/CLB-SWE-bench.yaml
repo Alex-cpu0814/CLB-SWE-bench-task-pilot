@@ -1,0 +1,7 @@
+name: CLB SWE-bench
+description: "Evaluate software repair on 72 tasks involving Python–C and Java–C interactions."
+evaluation_framework: swe-bench
+tasks:
+  - id: clb_swe_bench_%_resolved
+    config: default
+    split: test
