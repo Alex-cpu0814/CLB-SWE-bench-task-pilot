@@ -1,6 +1,6 @@
 # CLB 任务索引
 
-任务按语言组合和测试来源分组。旧版实验 ID 见[新旧 ID 对照表](../tools/archive/fixtures/instance-id-map.tsv)。
+任务按语言组合和测试来源分组。旧版实验 ID 见[新旧 ID 对照表](../docs/instance-id-map.tsv)。
 
 ## Python–C（50 题）
 

@@ -1,6 +1,6 @@
 # Three-task review for the CLB SWE-bench migration
 
-Reviewed sources, problem statements, and evaluation records for pilot commit `c8594c3e663c3ae65f0e61408ee09a9b8e7887f9`. The original [pilot control results](validation.md#2026-年-11-月-13-日对照结果) are from the pinned SWE-bench harness on WSL 2. This report uses the release IDs listed in the [instance ID map](../tools/archive/fixtures/instance-id-map.tsv).
+Reviewed sources, problem statements, and evaluation records for pilot commit `c8594c3e663c3ae65f0e61408ee09a9b8e7887f9`. The original [pilot control results](validation.md#2026-年-11-月-13-日对照结果) are from the pinned SWE-bench harness on WSL 2. This report uses the release IDs listed in the [instance ID map](instance-id-map.tsv).
 
 The standard SWE-bench collector joins the title and body of each linked issue into `problem_statement`. Comments collected as hints have a separate field. For CLB, use the same title-and-body rule when a linked issue describes the task. Keep all 72 frozen instances in the migration and copy each current `problem_statement` into `problem_statement.md`. Record source and evaluation findings as dataset limitations. [SWE-bench collector](https://github.com/SWE-bench/SWE-bench/blob/02e7a74ffd0b707aab73d203fe87bdc7c76afc8e/swebench/collect/utils.py#L251-L282)
 

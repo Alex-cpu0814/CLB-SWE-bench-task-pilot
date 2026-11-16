@@ -13,8 +13,8 @@ dependencies = [
 ]
 
 [project.scripts]
-dockerfile-gen = "dockerfile_gen.__main__:main"
-clb-dockerfile-gen = "dockerfile_gen.__main__:main"
+dockerfile-gen = "dockerfile_gen:main"
+clb-dockerfile-gen = "dockerfile_gen:main"
 
 [tool.setuptools.packages.find]
 include = ["dockerfile_gen*"]

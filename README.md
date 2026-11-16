@@ -9,7 +9,7 @@ CLB 收录 72 个跨语言修复任务，包括 50 个 Python–C、11 个 Java�
 `tasks/<instance_id>/` 存放每道题的题面、补丁、测试列表、评测脚本和 Docker 构建输入。
 `dockerfile_gen/` 生成这些目录中的 `Dockerfile` 和 `eval.sh`。
 `sweb.yaml` 注册数据集及其分割，`eval/` 存放发布用的评测配置。
-[任务索引](tasks/README.md) · [维护与复测](tools/README.md)
+[任务索引](tasks/README.md) · [新旧实例 ID 对照表](docs/instance-id-map.tsv)
 
 ## 安装和生成
 
@@ -23,7 +23,8 @@ python -m pip install -e .
 dockerfile-gen --check
 ~~~
 
-`dockerfile-gen` 会重新生成所有任务的 `Dockerfile` 和 `eval.sh`。可用
+`dockerfile-gen` 会重新生成所有任务的 `Dockerfile` 和 `eval.sh`，也可用 `clb-dockerfile-gen`。
+修改任务的构建和测试命令后，可用
 `dockerfile-gen --instance_ids scipy__scipy-clb-002` 只生成指定任务。
 生成器从 Python–C、Java–C 配置和共享辅助文件生成完整的评测 Dockerfile。构建时需要 Docker Buildx，
 并使用按 SHA-256 固定的 Base 镜像。[生成器](dockerfile_gen/) · [Base 镜像清单](dockerfile_gen/data/base-images.json)
@@ -43,3 +44,14 @@ swebench eval Alex-cpu0814/CLB-SWE-bench --task-repo . --gold \
 省略三个 `-i` 可评测预测文件中提交的任务。生成模型补丁时提供题面和对应的 Base 环境。
 
 [题面审核](docs/pilot-task-review.md) · [Base 和 Gold 验证记录](docs/validation.md) · [变更日志](CHANGELOG.md)
+
+## 导出数据
+
+~~~bash
+swebench dataset check .
+swebench dataset build . -o scratch/dataset
+cp docs/dataset-card.md scratch/dataset/CLB-SWE-bench/README.md
+~~~
+
+导出目录 `scratch/dataset/CLB-SWE-bench/` 包含 `test.parquet`、`eval.yaml` 和数据集卡片。
+[评测配置](eval/CLB-SWE-bench.yaml) · [数据集卡片](docs/dataset-card.md)

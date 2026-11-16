@@ -2,12 +2,14 @@
 
 ## 未发布
 
+- 将数据导出步骤合并到仓库首页，新旧实例 ID 对照表移入 `docs/`，历史复测材料保存在提交 `ccb644f`。
+- 将生成器命令入口和评测模板集中到 `dockerfile_gen/__init__.py`。安装后通过 `dockerfile-gen` 或 `clb-dockerfile-gen` 运行。
 - 按项目共享构建步骤，按题配置测试命令。Dockerfile 内嵌评测辅助文件，历史复测工具移入 `tools/archive/`。
 - 将 Base 镜像清单放入 `dockerfile_gen/data/`。
 - 生成器支持 `dockerfile-gen --instance_ids`，SWE-bench 依赖由 `pyproject.toml` 固定。
 - 将 72 题的数据集标识设为 `Alex-cpu0814/CLB-SWE-bench`。
 - 新增官方格式的 `eval/` 描述文件和 Hugging Face 数据集卡片。官方导出命令会随 Parquet 导出 `eval.yaml`。
-- 新增 `clb-dockerfile-gen` 可安装命令，`python -m dockerfile_gen` 继续可用。
+- 新增 `clb-dockerfile-gen` 可安装命令。
 - 将导入工具、复测工具及历史候选材料放到 `tools/`，把验证与题面审核记录移到 `docs/`。
 
 ## 任务生成器 `4853785`
@@ -24,5 +26,5 @@
 ## 72 题任务迁移 `31fe954`
 
 - 从冻结版迁移 50 个 Python–C、11 个 Java–C 作者测试和 11 个 Java–C 上游测试任务。
-- 实例 ID 改用仓库名称和原案例号，旧 ID 保存在[对照表](tools/archive/fixtures/instance-id-map.tsv)。
+- 实例 ID 改用仓库名称和原案例号，旧 ID 保存在[对照表](docs/instance-id-map.tsv)。
 - 固定 SWE-bench 5.0.2 的上游提交，沿用各题的题面、参考补丁、测试补丁和测试列表。

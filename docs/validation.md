@@ -80,10 +80,14 @@ Python 镜像需要兼容 Python 2.7 的日志转换。`ultrajson__ultrajson-clb
 从 Docker Hub 拉取镜像层并构建了下列三题，六次 Base／Gold 对照的判分和逐项测试状态均与归档一致。
 SciPy 的一个镜像层首次下载停滞，重试后完成。
 
-按[快速开始](../README.md#快速开始)安装依赖并检查数据后，可用以下命令在新构建器中复现。
-构建出的镜像载入 Docker，供 `tools/archive/verify_pilot.py` 运行 Base、Gold 和历史候选补丁。
+要复测 Base、Gold 和三条历史候选补丁，从提交 `ccb644f` 建立独立工作树。
+在该工作树安装依赖后，用新建的构建器构建镜像并运行归档脚本。
+[历史复测归档](https://github.com/Alex-cpu0814/CLB-SWE-bench-task-pilot/tree/ccb644f936ac310df32daeab38cc2cbbb720d20f/tools/archive)
 
 ~~~bash
+git worktree add --detach ../clb-historical-repro ccb644f936ac310df32daeab38cc2cbbb720d20f
+cd ../clb-historical-repro
+python -m pip install -e .
 docker buildx create --name clb-repro --driver docker-container
 docker buildx inspect clb-repro --bootstrap
 docker buildx du --builder clb-repro
