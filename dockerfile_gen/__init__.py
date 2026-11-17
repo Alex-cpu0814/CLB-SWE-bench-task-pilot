@@ -106,11 +106,13 @@ def render_files(instance_id, cohort, base_commit, image, test_patch):
     build = language.BUILD_OVERRIDES.get(instance_id, language.BUILD_BY_PROJECT[project])
     test_commands = language.TEST_COMMANDS[instance_id]
     adapter = f"#!/usr/bin/env bash\n{build}run_project_tests() {{\n{test_commands}"
-    dockerfile = java_c.DOCKERFILE_OVERRIDES.get(instance_id, f"FROM {image}\n")
+    fixtures = files(__package__) / "fixtures"
+    recipe = fixtures / "environments" / f"{instance_id}.Dockerfile"
+    dockerfile = recipe.read_text(encoding="utf-8")
+    dockerfile = dockerfile.replace("@BASE@", base_commit).replace("@INSTANCE@", instance_id)
     assets = [f"mkdir -p {asset_dir} || fail 'Cannot create evaluation fixture directory'\n"]
     assets.append(write_inline(adapter, f"{asset_dir}/case_adapter.sh"))
 
-    fixtures = files(__package__) / "fixtures"
     sources = language.PROJECT_FIXTURES.get(project, ()) + language.INSTANCE_FIXTURES.get(instance_id, ())
     for source in sorted(sources, key=lambda path: path.rsplit("/", 1)[-1]):
         fixture = fixtures.joinpath(*source.split("/"))

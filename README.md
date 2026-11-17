@@ -89,7 +89,7 @@ You can also supply your own `predictions.jsonl`. Each row contains `instance_id
 ## Repository layout
 
 - `tasks/<instance_id>/` contains task metadata, the problem statement, reference and test patches, and generated evaluation files. [Task index](tasks/README.md) · [Instance ID mapping](docs/instance-id-map.tsv)
-- `dockerfile_gen/` generates the `Dockerfile` and `eval.sh` for Python–C and Java–C tasks. Its `fixtures/` contains the build, test, and log processing files embedded in the evaluation scripts. [Generator](dockerfile_gen/)
+- `dockerfile_gen/` generates the `Dockerfile` and `eval.sh` for Python–C and Java–C tasks. Its `fixtures/environments/` contains source-build recipes; the remaining fixtures are embedded in the evaluation scripts. [Generator](dockerfile_gen/)
 - `sweb.yaml` registers datasets and splits. `eval/` holds the evaluation configuration. [Dataset registration](sweb.yaml) · [Evaluation configuration](eval/SWE-bench_CLB.yaml)
 
 ## Maintain and export the dataset
@@ -100,6 +100,19 @@ Regenerate the task files after changing build or test configuration. Omit `--in
 dockerfile-gen --instance_ids astrofrog__fast-histogram-clb-159
 dockerfile-gen --check
 ~~~
+
+All 72 tasks have source-build Dockerfiles. These start from public system or language images, install dependencies, and check out the task's Base commit. They do not inherit pre-built CLB images or require local source/dependency archives. Historical Java toolchains and JARs are downloaded from public URLs with SHA-256 checks; the legacy junixsocket toolchain is included as Docker build stages. Evaluation fixtures remain in `eval.sh`.
+
+To build one task under a separate local tag:
+
+~~~bash
+docker build \
+    --platform linux/amd64 \
+    -t clb-local/fast-histogram-159:source \
+    tasks/astrofrog__fast-histogram-clb-159
+~~~
+
+Builds require network access to the registries and dependency sources named in each Dockerfile, such as PyPI, GitHub, Maven Central, and OS package repositories. They do not call a model API. The 72 recipes have been migrated and statically checked; only Fast Histogram 159 has completed source-build qualification. The other 71 await individual build and evaluation checks. Published Docker Hub images have not been replaced. See [Validation results](docs/validation.md).
 
 `--for-publish` runs the SWE-bench task check during export and writes the published `yutu0814/` addresses to `image`.
 

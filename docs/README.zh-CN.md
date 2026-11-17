@@ -91,7 +91,7 @@ swebench eval Alex-cpu0814/SWE-bench_CLB \
 ## 仓库结构
 
 - `tasks/<instance_id>/` 存放任务元数据、题面、参考补丁、测试补丁和已生成的评测文件。[任务索引](../tasks/README.md) · [新旧实例 ID 对照表](instance-id-map.tsv)
-- `dockerfile_gen/` 按 Python–C 和 Java–C 的配置生成 `Dockerfile` 与 `eval.sh`。`fixtures/` 存放嵌入评测脚本的构建、测试运行和日志处理文件。[生成器](../dockerfile_gen/)
+- `dockerfile_gen/` 按 Python–C 和 Java–C 的配置生成 `Dockerfile` 与 `eval.sh`。`fixtures/environments/` 存放源码构建配方，其余辅助文件嵌入评测脚本。[生成器](../dockerfile_gen/)
 - `sweb.yaml` 注册数据集和 split，`eval/` 存放评测配置。[数据集注册](../sweb.yaml) · [评测配置](../eval/SWE-bench_CLB.yaml)
 
 ## 维护与导出
@@ -102,6 +102,19 @@ swebench eval Alex-cpu0814/SWE-bench_CLB \
 dockerfile-gen --instance_ids astrofrog__fast-histogram-clb-159
 dockerfile-gen --check
 ~~~
+
+全部 72 条任务已提供源码构建 Dockerfile，从公开的系统或语言基础镜像开始，安装依赖并检出任务的 Base 提交，不再继承预构建的 CLB 镜像，也不需要本机源码或依赖归档。历史 Java 工具链和 JAR 从公开地址下载并校验 SHA-256；旧版 junixsocket 工具链已包含在 Docker 构建阶段中。评测辅助文件仍在 `eval.sh` 中提供。
+
+可使用独立的本地标签构建一题：
+
+~~~bash
+docker build \
+    --platform linux/amd64 \
+    -t clb-local/fast-histogram-159:source \
+    tasks/astrofrog__fast-histogram-clb-159
+~~~
+
+构建需要访问各 Dockerfile 指定的镜像与依赖来源，例如 PyPI、GitHub、Maven Central 和系统包仓库，不调用模型 API。目前 72 条配方已完成迁移和静态检查；仅 Fast Histogram 159 完成源码构建验证，其余 71 条等待逐题构建和评测。Docker Hub 上已发布的镜像尚未替换。具体进度见[验证结果](validation.md)。
 
 `--for-publish` 在导出发布数据时执行 SWE-bench 的任务校验，并将实际的 `yutu0814/` 镜像地址写入 `image`。
 

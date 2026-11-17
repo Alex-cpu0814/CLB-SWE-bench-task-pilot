@@ -1,23 +1,11 @@
 """Generation settings for the two Java–C cohorts."""
 
-from .constants import CONTAINER_WORKDIR
-
 COHORTS = {"java_author11", "java_upstream11"}
 PILOT_NORMALIZERS = {
     "ninia__jep-clb-093": "python /opt/clb-pilot/normalize_results.py jep",
     "kohlschutter__junixsocket-clb-175": "python3 /opt/clb-pilot/normalize_results.py unittest",
 }
 
-# SWE-bench applies the patch as root before eval.sh runs. This checkout
-# belongs to the benchmark user, so configure Git in the shared image.
-DOCKERFILE_OVERRIDES = {
-    "mdsplus__mdsplus-clb-200": (
-        "FROM yutu0814/clb.base.x86_64.mdsplus_1776_mdsplus-clb-200:latest\n"
-        "USER root\n"
-        f"RUN git config --system --add safe.directory {CONTAINER_WORKDIR}\n"
-        "USER benchmark\n"
-    ),
-}
 
 EVAL_SETUP = {
     "lwjgl__lwjgl3-clb-075": (
