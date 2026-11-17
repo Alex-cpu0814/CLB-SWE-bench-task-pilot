@@ -15,6 +15,8 @@ configs:
 
 # SWE-bench CLB
 
+[简体中文使用说明](https://github.com/Alex-cpu0814/swe-bench-clb-tasks/blob/main/README.zh-CN.md)
+
 SWE-bench CLB is a cross-language software repair benchmark for Python–C and Java–C projects. Its `default` configuration has one `test` split containing 72 tasks.
 
 | Task group | Instances |
@@ -53,7 +55,8 @@ The `cohort` values `python50`, `java_author11`, and `java_upstream11` correspon
 
 ## Install
 
-Use Linux or WSL 2 with Python 3.10+, Git, and Docker with Linux amd64 support. The CLB task repository pins SWE-bench 5.0.2.
+Use Linux or WSL 2 with Python 3.10+, Git, and Docker with Linux amd64 support.
+Installing the CLB task repository installs the pinned SWE-bench 5.0.2 and its dependencies.
 
 ```bash
 git clone https://github.com/Alex-cpu0814/swe-bench-clb-tasks.git
@@ -72,6 +75,19 @@ python prepare_dataset.py -o scratch/local-swebench
 ```
 
 To check the generated task repository, run `swebench dataset check scratch/local-swebench/task-repo`. For inference and evaluation, you can also pass `scratch/local-swebench/dataset/SWE-bench_CLB` as the dataset.
+
+## Validate the reference patch
+
+Run `--gold` on Fast Histogram 159 to check the image, tests, and scoring.
+
+```bash
+swebench eval Alex-cpu0814/SWE-bench_CLB --gold \
+    -i astrofrog__fast-histogram-clb-159 \
+    --run-id clb-159-gold \
+    -j 1
+```
+
+The published validation covers Base and Gold checks for all 72 tasks. [Validation record](https://github.com/Alex-cpu0814/swe-bench-clb-tasks/blob/main/docs/validation.md)
 
 ## Generate predictions
 
@@ -103,14 +119,3 @@ swebench eval Alex-cpu0814/SWE-bench_CLB \
 ```
 
 For a batch of predictions, pass the batch file to `-p` and omit `-i` to evaluate the instances in that file. SWE-bench writes the summary to `logs/evaluation/<run_id>/results.json`. A task is resolved when all `FAIL_TO_PASS` and `PASS_TO_PASS` tests pass. Use a fresh run ID when grading a new patch. [SWE-bench CLI reference](https://github.com/SWE-bench/SWE-bench/blob/main/docs/reference/cli.md#swebench-eval-dataset)
-
-Use the reference patch to check that the task builds and scores successfully.
-
-```bash
-swebench eval Alex-cpu0814/SWE-bench_CLB --gold \
-    -i astrofrog__fast-histogram-clb-159 \
-    --run-id clb-159-gold \
-    -j 1
-```
-
-The published validation covers Base and Gold checks for all 72 tasks. [Validation record](https://github.com/Alex-cpu0814/swe-bench-clb-tasks/blob/main/docs/validation.md)
