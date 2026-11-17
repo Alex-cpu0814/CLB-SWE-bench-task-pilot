@@ -8,7 +8,6 @@
     "Alex-cpu0814/SWE-bench_CLB"
   ],
   "cohort": "python50",
-  "image_name": "yutu0814/sweb.eval.x86_64.scipy_1776_scipy-clb-044:latest",
   "image": "yutu0814/sweb.eval.x86_64.scipy_1776_scipy-clb-044:latest",
   "log_parser": "parse_log_pytest_v2",
   "eval_type": "pass_and_fail"

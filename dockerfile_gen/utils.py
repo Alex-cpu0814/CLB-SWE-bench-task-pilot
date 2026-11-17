@@ -5,10 +5,12 @@ from swebench.utils import generate_heredoc_delimiter
 from .constants import END_TEST_OUTPUT, TEST_PATCH_DELIMITER
 
 
-def validate_shared_image(instance_id: str, image: str, image_name: str) -> None:
+def task_image(instance_id: str, metadata: dict) -> str:
+    image = metadata["image"]
     slug = instance_id.replace("__", "_1776_").lower()
-    if image != f"yutu0814/sweb.eval.x86_64.{slug}:latest" or image_name != image:
-        raise ValueError(f"image and image_name must use the same CLB image tag for {instance_id}")
+    if image != f"yutu0814/sweb.eval.x86_64.{slug}:latest" or metadata.get("image_name", image) != image:
+        raise ValueError(f"Unexpected CLB image for {instance_id}")
+    return image
 
 
 def prepare_test_patch(instance_id: str, test_patch: str) -> str:

@@ -8,7 +8,6 @@
     "Alex-cpu0814/SWE-bench_CLB"
   ],
   "cohort": "python50",
-  "image_name": "yutu0814/sweb.eval.x86_64.astrofrog_1776_fast-histogram-clb-160:latest",
   "image": "yutu0814/sweb.eval.x86_64.astrofrog_1776_fast-histogram-clb-160:latest",
   "log_parser": "parse_log_pytest_v2",
   "eval_type": "pass_and_fail"

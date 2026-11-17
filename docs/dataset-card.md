@@ -37,8 +37,7 @@ repo              (str)        Upstream GitHub repository in owner/repo form.
 base_commit       (str)        Commit SHA at which the repair starts.
 version           (str)        CLB release identifier.
 cohort            (str)        Task group by language pair and test source.
-image_name        (str)        CLB Docker Hub image used for model inference.
-image             (str)        The same Docker Hub image, used for evaluation.
+image             (str)        Published CLB image on Docker Hub.
 log_parser        (str)        Parser used to extract test results from logs.
 eval_type         (str)        Grading mode, set to pass_and_fail.
 patch             (str)        Reference repair (Gold patch).
@@ -50,7 +49,7 @@ FAIL_TO_PASS      (list[str])  Tests expected to fail on Base and pass after rep
 PASS_TO_PASS      (list[str])  Tests expected to pass on Base and after repair.
 ```
 
-The `cohort` values `python50`, `java_author11`, and `java_upstream11` correspond to the three groups above, in that order. Both image fields use the `yutu0814/sweb.eval.x86_64.*:latest` convention.
+The `cohort` values `python50`, `java_author11`, and `java_upstream11` correspond to the three groups above, in that order. Images are published under `yutu0814/sweb.eval.x86_64.*:latest`.
 
 ## Install
 
@@ -64,9 +63,19 @@ source .venv/bin/activate
 python -m pip install -e .
 ```
 
+## Prepare local images
+
+Before running inference, run the preparation command on the same Docker host that will run mini-SWE-agent. The command pulls missing CLB images from `yutu0814/` and gives the same images the local `swebench/` tags that mini-SWE-agent derives from task IDs.
+
+```bash
+clb prepare-local -o scratch/local-swebench
+```
+
+To check the generated task repository, run `swebench dataset check scratch/local-swebench/task-repo`. For inference and evaluation, you can also pass `scratch/local-swebench/dataset/SWE-bench_CLB` as the dataset.
+
 ## Generate predictions
 
-Install mini-SWE-agent in the same environment, configure your model provider, and set `MODEL` to your model ID. SWE-bench gives mini-SWE-agent the problem statement and the image in `image_name`.
+Install mini-SWE-agent in the same environment, configure your model provider, and set `MODEL` to your model ID. Mini-SWE-agent starts from the local image tag prepared above.
 
 ```bash
 python -m pip install mini-swe-agent

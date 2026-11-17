@@ -24,12 +24,24 @@ python -m pip install -e .
 ~~~
 
 安装时会一并安装仓库固定的 SWE-bench 5.0.2 版本。后续命令都在仓库根目录的同一个 Python 环境里运行。
-每个任务的 `image_name` 和 `image` 都指向 Docker Hub 上同一个 `:latest` 镜像，分别供推理和评测读取。
+
+## 准备本地镜像
+
+运行推理前，请在**同一台 Docker 主机**上执行准备命令。`image` 记录实际发布在 Docker Hub 的地址。
+脚本从 `yutu0814/` 拉取本机缺少的镜像，并添加 mini-SWE-agent 根据任务 ID 推导出的 `swebench/` 本地标签。
+两个标签引用同一个镜像。
+
+~~~bash
+clb prepare-local -o scratch/local-swebench
+~~~
+
+要校验本地任务，运行 `swebench dataset check scratch/local-swebench/task-repo`。
+后面的推理和评测命令也可以将数据集名称替换成 `scratch/local-swebench/dataset/SWE-bench_CLB`，直接使用导出的本地 Parquet。
 
 ## 生成模型补丁
 
 安装 `mini-swe-agent`，配置模型供应商要求的 API 密钥和环境变量，并将 Bash 变量 `MODEL` 设为模型 ID。
-下面以 Fast Histogram 159 为例。`swebench infer` 从数据集读取题面和 `image_name`，交给 mini-SWE-agent 生成补丁。
+下面以 Fast Histogram 159 为例。mini-SWE-agent 从准备好的本地镜像启动容器并生成补丁。
 
 ~~~bash
 python -m pip install mini-swe-agent
@@ -89,7 +101,7 @@ dockerfile-gen --instance_ids astrofrog__fast-histogram-clb-159
 dockerfile-gen --check
 ~~~
 
-校验和导出复用 SWE-bench 的任务格式检查与数据导出。两个镜像字段在导出时使用相同的 Docker Hub 地址。
+校验和导出复用 SWE-bench 的任务格式检查与数据导出。公开数据的 `image` 使用实际的 `yutu0814/` 地址。
 
 ~~~bash
 clb check

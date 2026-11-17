@@ -8,7 +8,6 @@
     "Alex-cpu0814/SWE-bench_CLB"
   ],
   "cohort": "java_upstream11",
-  "image_name": "yutu0814/sweb.eval.x86_64.mdsplus_1776_mdsplus-clb-200:latest",
   "image": "yutu0814/sweb.eval.x86_64.mdsplus_1776_mdsplus-clb-200:latest",
   "log_parser": "parse_log_pytest_v2",
   "eval_type": "pass_and_fail"

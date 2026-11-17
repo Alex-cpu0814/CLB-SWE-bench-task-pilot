@@ -3,13 +3,14 @@
 import argparse
 import shutil
 import subprocess
+from contextlib import closing
 from pathlib import Path
 from tempfile import TemporaryDirectory
 
 from swebench.task.checks import expected_image
 from swebench.task.repo import dump_yaml, load_yaml, task_dirs
 
-from .utils import validate_shared_image
+from .utils import task_image
 
 
 DATASET = "Alex-cpu0814/SWE-bench_CLB"
@@ -20,15 +21,15 @@ def swebench(*arguments):
 
 
 def evaluation_checkout(repo: Path, destination: Path) -> dict[str, str]:
-    """Give SWE-bench task files with a separate, locally built Eval image tag."""
+    """Copy tasks with the canonical image names required by the upstream check."""
     shutil.copy2(repo / "sweb.yaml", destination)
     shutil.copytree(repo / "eval", destination / "eval")
     images = {}
     for task in task_dirs(repo):
         metadata = load_yaml(task / "task.yaml")
-        images[task.name] = metadata["image"]
-        validate_shared_image(task.name, metadata["image"], metadata["image_name"])
+        images[task.name] = task_image(task.name, metadata)
         metadata["image"] = expected_image(task.name)
+        metadata.pop("image_name", None)
         target = destination / "tasks" / task.name
         shutil.copytree(task, target)
         (target / "task.yaml").write_text(dump_yaml(metadata), encoding="utf-8")
@@ -42,8 +43,7 @@ def infer(repo: Path, arguments: list[str]) -> int:
     splits = {}
     for task in task_dirs(repo):
         metadata = load_yaml(task / "task.yaml")
-        image = metadata["image"]
-        validate_shared_image(task.name, image, metadata["image_name"])
+        image = task_image(task.name, metadata)
         splits.setdefault(metadata["split"], []).append({
             "instance_id": task.name,
             "problem_statement": (task / "problem_statement.md").read_bytes().decode("utf-8"),
@@ -75,6 +75,48 @@ def evaluate(repo: Path, arguments: list[str]) -> int:
             evaluation_checkout(repo, checkout)
             checkout.rename(snapshot)
     return swebench("eval", DATASET, "--task-repo", snapshot, "--run-id", run_id, *forwarded)
+
+
+def prepare_local(repo: Path, arguments: list[str]) -> int:
+    import docker
+    from docker.errors import DockerException, ImageNotFound
+    from swebench.task.publish import CheckFailed, write_parquets
+
+    parser = argparse.ArgumentParser(
+        prog="clb prepare-local",
+        description="Tag the published CLB images locally and export SWE-bench task files.",
+    )
+    parser.add_argument("-o", "--output", type=Path, required=True)
+    output = parser.parse_args(arguments).output.resolve()
+    if output.exists():
+        parser.error(f"Output directory already exists: {output}")
+    output.parent.mkdir(parents=True, exist_ok=True)
+
+    try:
+        with TemporaryDirectory(prefix=".clb-local-", dir=output.parent) as directory:
+            staging = Path(directory) / "output"
+            checkout = staging / "task-repo"
+            checkout.mkdir(parents=True)
+            images = evaluation_checkout(repo, checkout)
+            write_parquets(checkout, staging / "dataset")
+
+            with closing(docker.from_env(timeout=180)) as client:
+                for index, (instance_id, source) in enumerate(images.items(), start=1):
+                    alias = expected_image(instance_id)
+                    print(f"[{index}/{len(images)}] {source} -> {alias}", flush=True)
+                    try:
+                        image = client.images.get(source)
+                    except ImageNotFound:
+                        image = client.images.pull(source, platform="linux/amd64")
+                    if not image.tag(alias) or client.images.get(alias).id != image.id:
+                        raise RuntimeError(f"Alias does not refer to the source image: {alias}")
+            staging.rename(output)
+    except (CheckFailed, DockerException, OSError, RuntimeError, ValueError) as error:
+        parser.exit(1, f"{parser.prog}: {error}\n")
+
+    print(f"Task repository: {output / 'task-repo'}")
+    print(f"Dataset: {output / 'dataset' / DATASET.rsplit('/', 1)[-1]}")
+    return 0
 
 
 def export(repo: Path, command: str, arguments: list[str]) -> int:
@@ -110,7 +152,7 @@ def export(repo: Path, command: str, arguments: list[str]) -> int:
 
 def main() -> int:
     parser = argparse.ArgumentParser(description="Run official SWE-bench tools on CLB's task repository.")
-    parser.add_argument("command", choices=("infer", "eval", "check", "build"))
+    parser.add_argument("command", choices=("infer", "eval", "check", "build", "prepare-local"))
     parser.add_argument("arguments", nargs=argparse.REMAINDER)
     args = parser.parse_args()
     repo = Path.cwd()
@@ -120,4 +162,6 @@ def main() -> int:
         return infer(repo, args.arguments)
     if args.command == "eval":
         return evaluate(repo, args.arguments)
+    if args.command == "prepare-local":
+        return prepare_local(repo, args.arguments)
     return export(repo, args.command, args.arguments)

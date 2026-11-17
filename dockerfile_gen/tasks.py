@@ -5,7 +5,7 @@ from pathlib import Path
 from swebench.task.repo import load_yaml, task_dirs
 
 from . import render_files
-from .utils import validate_shared_image
+from .utils import task_image
 
 
 def plan_updates(task_repo: Path, instance_ids: list[str] | None) -> tuple[int, dict[Path, bytes]]:
@@ -23,8 +23,7 @@ def plan_updates(task_repo: Path, instance_ids: list[str] | None) -> tuple[int, 
         metadata = load_yaml(directory / "task.yaml")
         if metadata["instance_id"] != name:
             raise ValueError(f"Task metadata does not match directory name: {name}")
-        image = metadata["image"]
-        validate_shared_image(name, image, metadata["image_name"])
+        image = task_image(name, metadata)
         patch = (directory / "test.patch").read_bytes().decode("utf-8")
         generated = render_files(name, metadata["cohort"], metadata["base_commit"], image, patch)
         for filename, content in generated.items():

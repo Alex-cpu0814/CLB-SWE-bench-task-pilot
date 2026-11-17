@@ -8,7 +8,6 @@
     "Alex-cpu0814/SWE-bench_CLB"
   ],
   "cohort": "java_author11",
-  "image_name": "yutu0814/sweb.eval.x86_64.ninia_1776_jep-clb-097:latest",
   "image": "yutu0814/sweb.eval.x86_64.ninia_1776_jep-clb-097:latest",
   "log_parser": "parse_log_pytest_v2",
   "eval_type": "pass_and_fail"
