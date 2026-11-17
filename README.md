@@ -47,12 +47,13 @@ Run `--gold` on Fast Histogram 159 to check that the image, tests, and scoring w
 swebench eval Alex-cpu0814/SWE-bench_CLB --gold \
     -i astrofrog__fast-histogram-clb-159 \
     --run-id clb-159-gold \
-    -j 1
+    --task-repo scratch/local-swebench/task-repo
 ~~~
 
 ## Generate model patches
 
 Install `mini-swe-agent`, configure the API credentials and environment variables for your model provider, and set the Bash variable `MODEL` to your model ID.
+For provider and key configuration, follow the mini-SWE-agent model setup guide. [Model setup](https://mini-swe-agent.com/latest/models/quickstart/)
 This example uses Fast Histogram 159. Mini-SWE-agent starts a container from the local image prepared above and generates a patch.
 
 ~~~bash
@@ -70,14 +71,14 @@ Use `-w` to set how many tasks run concurrently during inference.
 
 ## Evaluate model patches
 
-`swebench eval` reads `image` and starts a fresh container from the same image. After the evaluator applies the candidate patch, `eval.sh` applies the test patch, writes the evaluation fixtures, and runs the tests.
+With `--task-repo`, SWE-bench reads the tasks from the prepared local checkout, validates it, and checks or builds the required images from its Dockerfiles. The evaluator then starts a fresh container and applies the candidate patch. Next, `eval.sh` applies the test patch, writes the evaluation fixtures, and runs the tests.
 
 ~~~bash
 swebench eval Alex-cpu0814/SWE-bench_CLB \
     -p logs/inference/clb-159/preds.json \
     -i astrofrog__fast-histogram-clb-159 \
     --run-id clb-159 \
-    -j 1
+    --task-repo scratch/local-swebench/task-repo
 ~~~
 
 Results go to `logs/evaluation/clb-159/results.json`. A task is resolved when all `FAIL_TO_PASS` and `PASS_TO_PASS` tests pass.

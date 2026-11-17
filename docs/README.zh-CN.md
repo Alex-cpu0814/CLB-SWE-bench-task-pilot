@@ -49,12 +49,13 @@ python prepare_dataset.py -o scratch/local-swebench
 swebench eval Alex-cpu0814/SWE-bench_CLB --gold \
     -i astrofrog__fast-histogram-clb-159 \
     --run-id clb-159-gold \
-    -j 1
+    --task-repo scratch/local-swebench/task-repo
 ~~~
 
 ## 生成模型补丁
 
 安装 `mini-swe-agent`，配置模型供应商要求的 API 密钥和环境变量，并将 Bash 变量 `MODEL` 设为模型 ID。
+模型供应商和密钥的配置步骤见 mini-SWE-agent 官方文档。[模型配置](https://mini-swe-agent.com/latest/models/quickstart/)
 下面以 Fast Histogram 159 为例。mini-SWE-agent 从准备好的本地镜像启动容器并生成补丁。
 
 ~~~bash
@@ -72,14 +73,14 @@ swebench infer Alex-cpu0814/SWE-bench_CLB \
 
 ## 评测模型补丁
 
-`swebench eval` 从数据集读取 `image` 并启动同一镜像的新容器。评测器应用候选补丁后，`eval.sh` 再应用测试补丁、准备辅助文件并运行测试。
+指定 `--task-repo` 后，SWE-bench 从准备好的本地副本读取任务，校验任务文件，并按其中的 Dockerfile 检查或构建镜像。随后评测器启动新容器并应用候选补丁，`eval.sh` 再应用测试补丁、准备辅助文件并运行测试。
 
 ~~~bash
 swebench eval Alex-cpu0814/SWE-bench_CLB \
     -p logs/inference/clb-159/preds.json \
     -i astrofrog__fast-histogram-clb-159 \
     --run-id clb-159 \
-    -j 1
+    --task-repo scratch/local-swebench/task-repo
 ~~~
 
 结果写入 `logs/evaluation/clb-159/results.json`。全部 `FAIL_TO_PASS` 和 `PASS_TO_PASS` 测试通过时，该题判为已修复。

@@ -84,7 +84,7 @@ Run `--gold` on Fast Histogram 159 to check the image, tests, and scoring.
 swebench eval Alex-cpu0814/SWE-bench_CLB --gold \
     -i astrofrog__fast-histogram-clb-159 \
     --run-id clb-159-gold \
-    -j 1
+    --task-repo scratch/local-swebench/task-repo
 ```
 
 Validation covers reference patches and unrelated control patches for all 72 tasks. [Validation results](https://github.com/Alex-cpu0814/swe-bench-clb-tasks/blob/main/docs/validation.md)
@@ -92,6 +92,7 @@ Validation covers reference patches and unrelated control patches for all 72 tas
 ## Generate predictions
 
 Install mini-SWE-agent in the same environment, configure your model provider, and set `MODEL` to your model ID. Mini-SWE-agent starts from the local image tag prepared above.
+Follow the official guide to configure your provider and API credentials. [Model setup](https://mini-swe-agent.com/latest/models/quickstart/)
 
 ```bash
 python -m pip install mini-swe-agent
@@ -106,7 +107,7 @@ The runner writes `logs/inference/clb-159/preds.json` and the task trajectory.
 
 ## Evaluation
 
-SWE-bench starts a fresh container from `image` and applies the candidate patch. The evaluation script then applies the test patch, writes the evaluation fixtures, and runs the tests.
+With `--task-repo`, SWE-bench reads the tasks from the prepared local checkout, validates it, and checks or builds the required images from its Dockerfiles. The evaluator then starts a fresh container and applies the candidate patch. The evaluation script applies the test patch, writes the evaluation fixtures, and runs the tests.
 
 Evaluate the prediction for Fast Histogram 159 generated above.
 
@@ -115,7 +116,7 @@ swebench eval Alex-cpu0814/SWE-bench_CLB \
     -p logs/inference/clb-159/preds.json \
     -i astrofrog__fast-histogram-clb-159 \
     --run-id clb-159 \
-    -j 1
+    --task-repo scratch/local-swebench/task-repo
 ```
 
 For a batch of predictions, pass the batch file to `-p` and omit `-i` to evaluate the instances in that file. SWE-bench writes the summary to `logs/evaluation/<run_id>/results.json`. A task is resolved when all `FAIL_TO_PASS` and `PASS_TO_PASS` tests pass. Use a fresh run ID when grading a new patch. [SWE-bench CLI reference](https://github.com/SWE-bench/SWE-bench/blob/main/docs/reference/cli.md#swebench-eval-dataset)
