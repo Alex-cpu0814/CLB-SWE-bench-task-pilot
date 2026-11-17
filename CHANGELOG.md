@@ -2,6 +2,7 @@
 
 ## 未发布
 
+- Hugging Face 数据集改名为 `Alex-cpu0814/SWE-bench_CLB`，展示名统一为 SWE-bench CLB。
 - 72 题统一使用 `image` 指向 Docker Hub 上的 `yutu0814/sweb.eval.x86_64.*:latest` Base 镜像。
 - `clb` 命令适配 Base 镜像字段并复用官方 SWE-bench 的推理、评测、校验和导出流程。
 - 将数据导出步骤合并到仓库首页，新旧实例 ID 对照表移入 `docs/`，历史复测材料保存在提交 `ccb644f`。

@@ -12,7 +12,7 @@ from swebench.task.repo import dump_yaml, load_yaml, task_dirs
 from .tasks import load_base_images, published_base_image
 
 
-DATASET = "Alex-cpu0814/CLB-SWE-bench"
+DATASET = "Alex-cpu0814/SWE-bench_CLB"
 
 
 def swebench(*arguments):
@@ -107,7 +107,8 @@ def export(repo: Path, command: str, arguments: list[str]) -> int:
             bases = pa.array([images[iid] for iid in table["instance_id"].to_pylist()])
             pq.write_table(table.set_column(index, table.schema.field(index), bases), path)
             print(f"Wrote {path}")
-        shutil.copy2(repo / "docs" / "dataset-card.md", options.output / "CLB-SWE-bench" / "README.md")
+        dataset_directory = options.output / DATASET.rsplit("/", 1)[-1]
+        shutil.copy2(repo / "docs" / "dataset-card.md", dataset_directory / "README.md")
     return 0
 
 

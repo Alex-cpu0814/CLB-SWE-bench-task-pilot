@@ -1,8 +1,8 @@
-# CLB SWE-bench 任务仓库
+# SWE-bench CLB 任务仓库
 
-CLB SWE-bench 是一个跨语言软件修复数据集，包含 72 个 Python–C 和 Java–C 任务。
+SWE-bench CLB 是一个跨语言软件修复数据集，包含 72 个 Python–C 和 Java–C 任务。
 模型从题面和固定版本的代码出发生成补丁，再由官方 SWE-bench 评测器运行测试。
-[Hugging Face 数据集](https://huggingface.co/datasets/Alex-cpu0814/CLB-SWE-bench) · [任务索引](tasks/README.md)
+[Hugging Face 数据集](https://huggingface.co/datasets/Alex-cpu0814/SWE-bench_CLB) · [任务索引](tasks/README.md)
 
 | 任务分组 | 数量 |
 | --- | ---: |
@@ -78,7 +78,7 @@ clb eval --gold \
 
 - `tasks/<instance_id>/` 存放任务元数据、题面、参考补丁、测试补丁和已生成的评测文件。[任务索引](tasks/README.md) · [新旧实例 ID 对照表](docs/instance-id-map.tsv)
 - `dockerfile_gen/` 按 Python–C 和 Java–C 的配置生成 `Dockerfile` 与 `eval.sh`。其中的 `fixtures/` 存放构建、测试运行和日志处理的辅助文件。[生成器](dockerfile_gen/) · [Base 镜像清单](dockerfile_gen/data/base-images.json)
-- `sweb.yaml` 注册数据集和 split，`eval/` 存放评测配置。[数据集注册](sweb.yaml) · [评测配置](eval/CLB-SWE-bench.yaml)
+- `sweb.yaml` 注册数据集和 split，`eval/` 存放评测配置。[数据集注册](sweb.yaml) · [评测配置](eval/SWE-bench_CLB.yaml)
 
 ## 维护与导出
 
@@ -96,5 +96,5 @@ clb check
 clb build -o scratch/dataset
 ~~~
 
-导出目录 `scratch/dataset/CLB-SWE-bench/` 包含 `test.parquet`、`eval.yaml` 和数据集卡片。
+导出目录 `scratch/dataset/SWE-bench_CLB/` 包含 `test.parquet`、`eval.yaml` 和数据集卡片。
 [Base 和 Gold 验证记录](docs/validation.md) · [题面审核](docs/pilot-task-review.md) · [变更日志](CHANGELOG.md)

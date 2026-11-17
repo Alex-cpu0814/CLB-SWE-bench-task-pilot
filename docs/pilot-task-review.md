@@ -1,4 +1,4 @@
-# Three-task review for the CLB SWE-bench migration
+# Three-task review for the SWE-bench CLB migration
 
 Reviewed sources, problem statements, and evaluation records for pilot commit `c8594c3e663c3ae65f0e61408ee09a9b8e7887f9`. The original [pilot control results](validation.md#2026-年-11-月-13-日对照结果) are from the pinned SWE-bench harness on WSL 2. This report uses the release IDs listed in the [instance ID map](instance-id-map.tsv).
 

@@ -1,6 +1,6 @@
 {
   "datasets": [
-    "Alex-cpu0814/CLB-SWE-bench"
+    "Alex-cpu0814/SWE-bench_CLB"
   ],
   "splits": [
     "test"

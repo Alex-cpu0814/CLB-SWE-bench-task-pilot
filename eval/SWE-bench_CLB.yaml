@@ -1,4 +1,4 @@
-name: CLB SWE-bench
+name: SWE-bench CLB
 description: "Evaluate software repair on 72 tasks involving Python–C and Java–C interactions."
 evaluation_framework: swe-bench
 tasks:

@@ -1,5 +1,5 @@
 ---
-pretty_name: CLB SWE-bench
+pretty_name: SWE-bench CLB
 language:
   - en
 tags:
@@ -13,9 +13,9 @@ configs:
         path: test.parquet
 ---
 
-# CLB SWE-bench
+# SWE-bench CLB
 
-CLB SWE-bench is a cross-language software repair benchmark for Python–C and Java–C projects. Its `default` configuration has one `test` split containing 72 tasks.
+SWE-bench CLB is a cross-language software repair benchmark for Python–C and Java–C projects. Its `default` configuration has one `test` split containing 72 tasks.
 
 | Task group | Instances |
 | --- | ---: |

@@ -5,7 +5,7 @@
   "version": "clb-v1-pilot",
   "split": "test",
   "datasets": [
-    "Alex-cpu0814/CLB-SWE-bench"
+    "Alex-cpu0814/SWE-bench_CLB"
   ],
   "cohort": "java_upstream11",
   "image": "yutu0814/sweb.eval.x86_64.lwjgl_1776_lwjgl3-clb-069:latest",
