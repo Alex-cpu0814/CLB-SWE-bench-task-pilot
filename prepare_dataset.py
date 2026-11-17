@@ -86,7 +86,7 @@ def main() -> int:
         output.parent.mkdir(parents=True, exist_ok=True)
         with TemporaryDirectory(prefix=".clb-prepare-", dir=output.parent) as directory:
             staging = Path(directory) / "output"
-            checkout = staging / "task-repo"
+            checkout = staging / "swe-bench-clb-tasks"
             checkout.mkdir(parents=True)
             images = copy_tasks(repo, checkout)
             if options.for_publish:
@@ -95,7 +95,7 @@ def main() -> int:
                 write_parquets(checkout, staging / "dataset")
                 tag_images(images)
                 staging.rename(output)
-                print(f"Task repository: {output / 'task-repo'}")
+                print(f"Task repository: {output / 'swe-bench-clb-tasks'}")
                 print(f"Dataset: {output / 'dataset' / DATASET_NAME}")
     except (DockerException, OSError, RuntimeError, ValueError) as error:
         parser.exit(1, f"{parser.prog}: {error}\n")

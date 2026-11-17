@@ -36,7 +36,7 @@ The script pulls any missing CLB images from `yutu0814/` and adds the local `swe
 python prepare_dataset.py -o scratch/local-swebench
 ~~~
 
-To check the generated task repository, run `swebench dataset check scratch/local-swebench/task-repo`.
+To check the generated task repository, run `swebench dataset check scratch/local-swebench/swe-bench-clb-tasks`.
 You can also use the exported Parquet for inference and evaluation by passing `scratch/local-swebench/dataset/SWE-bench_CLB` as the dataset.
 
 ## Validate the reference patch
@@ -47,7 +47,7 @@ Run `--gold` on Fast Histogram 159 to check that the image, tests, and scoring w
 swebench eval Alex-cpu0814/SWE-bench_CLB --gold \
     -i astrofrog__fast-histogram-clb-159 \
     --run-id clb-159-gold \
-    --task-repo scratch/local-swebench/task-repo
+    --task-repo scratch/local-swebench/swe-bench-clb-tasks
 ~~~
 
 ## Generate model patches
@@ -78,7 +78,7 @@ swebench eval Alex-cpu0814/SWE-bench_CLB \
     -p logs/inference/clb-159/preds.json \
     -i astrofrog__fast-histogram-clb-159 \
     --run-id clb-159 \
-    --task-repo scratch/local-swebench/task-repo
+    --task-repo scratch/local-swebench/swe-bench-clb-tasks
 ~~~
 
 Results go to `logs/evaluation/clb-159/results.json`. A task is resolved when all `FAIL_TO_PASS` and `PASS_TO_PASS` tests pass.

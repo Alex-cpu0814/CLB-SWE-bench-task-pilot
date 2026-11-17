@@ -74,7 +74,7 @@ Before running inference, run the preparation command on the same Docker host th
 python prepare_dataset.py -o scratch/local-swebench
 ```
 
-To check the generated task repository, run `swebench dataset check scratch/local-swebench/task-repo`. For inference and evaluation, you can also pass `scratch/local-swebench/dataset/SWE-bench_CLB` as the dataset.
+To check the generated task repository, run `swebench dataset check scratch/local-swebench/swe-bench-clb-tasks`. For inference and evaluation, you can also pass `scratch/local-swebench/dataset/SWE-bench_CLB` as the dataset.
 
 ## Validate the reference patch
 
@@ -84,7 +84,7 @@ Run `--gold` on Fast Histogram 159 to check the image, tests, and scoring.
 swebench eval Alex-cpu0814/SWE-bench_CLB --gold \
     -i astrofrog__fast-histogram-clb-159 \
     --run-id clb-159-gold \
-    --task-repo scratch/local-swebench/task-repo
+    --task-repo scratch/local-swebench/swe-bench-clb-tasks
 ```
 
 Validation covers reference patches and unrelated control patches for all 72 tasks. [Validation results](https://github.com/Alex-cpu0814/swe-bench-clb-tasks/blob/main/docs/validation.md)
@@ -116,7 +116,7 @@ swebench eval Alex-cpu0814/SWE-bench_CLB \
     -p logs/inference/clb-159/preds.json \
     -i astrofrog__fast-histogram-clb-159 \
     --run-id clb-159 \
-    --task-repo scratch/local-swebench/task-repo
+    --task-repo scratch/local-swebench/swe-bench-clb-tasks
 ```
 
 For a batch of predictions, pass the batch file to `-p` and omit `-i` to evaluate the instances in that file. SWE-bench writes the summary to `logs/evaluation/<run_id>/results.json`. A task is resolved when all `FAIL_TO_PASS` and `PASS_TO_PASS` tests pass. Use a fresh run ID when grading a new patch. [SWE-bench CLI reference](https://github.com/SWE-bench/SWE-bench/blob/main/docs/reference/cli.md#swebench-eval-dataset)

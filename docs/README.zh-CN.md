@@ -38,7 +38,7 @@ python -m pip install -e .
 python prepare_dataset.py -o scratch/local-swebench
 ~~~
 
-要校验本地任务，运行 `swebench dataset check scratch/local-swebench/task-repo`。
+要校验本地任务，运行 `swebench dataset check scratch/local-swebench/swe-bench-clb-tasks`。
 后面的推理和评测命令也可以将数据集名称替换成 `scratch/local-swebench/dataset/SWE-bench_CLB`，直接使用导出的本地 Parquet。
 
 ## 验证参考补丁
@@ -49,7 +49,7 @@ python prepare_dataset.py -o scratch/local-swebench
 swebench eval Alex-cpu0814/SWE-bench_CLB --gold \
     -i astrofrog__fast-histogram-clb-159 \
     --run-id clb-159-gold \
-    --task-repo scratch/local-swebench/task-repo
+    --task-repo scratch/local-swebench/swe-bench-clb-tasks
 ~~~
 
 ## 生成模型补丁
@@ -80,7 +80,7 @@ swebench eval Alex-cpu0814/SWE-bench_CLB \
     -p logs/inference/clb-159/preds.json \
     -i astrofrog__fast-histogram-clb-159 \
     --run-id clb-159 \
-    --task-repo scratch/local-swebench/task-repo
+    --task-repo scratch/local-swebench/swe-bench-clb-tasks
 ~~~
 
 结果写入 `logs/evaluation/clb-159/results.json`。全部 `FAIL_TO_PASS` 和 `PASS_TO_PASS` 测试通过时，该题判为已修复。
