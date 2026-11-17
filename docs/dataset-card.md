@@ -68,7 +68,7 @@ python -m pip install -e .
 Before running inference, run the preparation command on the same Docker host that will run mini-SWE-agent. The command pulls missing CLB images from `yutu0814/` and gives the same images the local `swebench/` tags that mini-SWE-agent derives from task IDs.
 
 ```bash
-clb prepare-local -o scratch/local-swebench
+python prepare_dataset.py -o scratch/local-swebench
 ```
 
 To check the generated task repository, run `swebench dataset check scratch/local-swebench/task-repo`. For inference and evaluation, you can also pass `scratch/local-swebench/dataset/SWE-bench_CLB` as the dataset.

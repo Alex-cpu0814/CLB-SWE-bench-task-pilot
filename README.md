@@ -32,7 +32,7 @@ python -m pip install -e .
 两个标签引用同一个镜像。
 
 ~~~bash
-clb prepare-local -o scratch/local-swebench
+python prepare_dataset.py -o scratch/local-swebench
 ~~~
 
 要校验本地任务，运行 `swebench dataset check scratch/local-swebench/task-repo`。
@@ -101,11 +101,10 @@ dockerfile-gen --instance_ids astrofrog__fast-histogram-clb-159
 dockerfile-gen --check
 ~~~
 
-校验和导出复用 SWE-bench 的任务格式检查与数据导出。公开数据的 `image` 使用实际的 `yutu0814/` 地址。
+`--for-publish` 在导出发布数据时执行 SWE-bench 的任务校验，并将实际的 `yutu0814/` 镜像地址写入 `image`。
 
 ~~~bash
-clb check
-clb build -o scratch/dataset
+python prepare_dataset.py --for-publish -o scratch/dataset
 ~~~
 
 导出目录 `scratch/dataset/SWE-bench_CLB/` 包含 `test.parquet`、`eval.yaml` 和数据集卡片。
