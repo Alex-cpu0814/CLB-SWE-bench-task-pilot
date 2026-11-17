@@ -15,7 +15,7 @@ configs:
 
 # SWE-bench CLB
 
-[简体中文使用说明](https://github.com/Alex-cpu0814/swe-bench-clb-tasks/blob/main/README.zh-CN.md)
+[简体中文使用说明](https://github.com/Alex-cpu0814/swe-bench-clb-tasks/blob/main/docs/README.zh-CN.md)
 
 SWE-bench CLB is a cross-language software repair benchmark for Python–C and Java–C projects. Its `default` configuration has one `test` split containing 72 tasks.
 
@@ -87,7 +87,7 @@ swebench eval Alex-cpu0814/SWE-bench_CLB --gold \
     -j 1
 ```
 
-The published validation covers Base and Gold checks for all 72 tasks. [Validation record](https://github.com/Alex-cpu0814/swe-bench-clb-tasks/blob/main/docs/validation.md)
+Validation covers reference patches and unrelated control patches for all 72 tasks. [Validation results](https://github.com/Alex-cpu0814/swe-bench-clb-tasks/blob/main/docs/validation.md)
 
 ## Generate predictions
 

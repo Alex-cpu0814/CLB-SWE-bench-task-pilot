@@ -24,7 +24,7 @@
 
 - 将 72 题切换到 `yutu0814/clb.base.x86_64.*:latest`，按题锁定镜像摘要。
 - 72 个 Base 控制均未解决，72 个 Gold 控制均通过。三道代表题完成空构建缓存复现。
-- LWJGL `075` 的依赖路径、junixsocket `160` 的并行超时和 Pycairo `139` 的 Base 中止记录见[验证记录](docs/validation.md#新-base-镜像验证)。
+- LWJGL `075` 的依赖路径、junixsocket `160` 的并行超时和 Pycairo `139` 的 Base 中止记录见[历史验证记录](https://github.com/Alex-cpu0814/swe-bench-clb-tasks/blob/3b916e2fbc756ce8868b93b2a46d93c32f0ddeef/docs/validation.md#新-base-镜像验证)。
 
 ## 72 题任务迁移 `31fe954`
 

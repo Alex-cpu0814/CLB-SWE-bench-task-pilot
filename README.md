@@ -1,6 +1,6 @@
 # SWE-bench CLB task repository
 
-[简体中文](README.zh-CN.md)
+[简体中文](docs/README.zh-CN.md)
 
 SWE-bench CLB is a cross-language software repair benchmark with 72 Python–C and Java–C tasks.
 Models generate patches from task statements and fixed source revisions. The official SWE-bench evaluator runs the tests.
@@ -108,4 +108,4 @@ python prepare_dataset.py --for-publish -o scratch/dataset
 
 The output directory `scratch/dataset/SWE-bench_CLB/` contains `test.parquet`, `eval.yaml`, and the dataset card.
 To verify changes before publishing, use the exported dataset directory in the example commands.
-[Base and Gold validation](docs/validation.md) · [Changelog](CHANGELOG.md)
+[Validation results](docs/validation.md) · [Changelog](CHANGELOG.md)
