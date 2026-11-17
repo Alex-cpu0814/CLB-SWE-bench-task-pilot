@@ -13,6 +13,7 @@ dependencies = [
 ]
 
 [project.scripts]
+clb = "dockerfile_gen.cli:main"
 dockerfile-gen = "dockerfile_gen:main"
 clb-dockerfile-gen = "dockerfile_gen:main"
 

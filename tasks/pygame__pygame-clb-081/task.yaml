@@ -8,7 +8,7 @@
     "Alex-cpu0814/CLB-SWE-bench"
   ],
   "cohort": "python50",
-  "image": "swebench/sweb.eval.x86_64.pygame_1776_pygame-clb-081:latest",
+  "image": "yutu0814/sweb.eval.x86_64.pygame_1776_pygame-clb-081:latest",
   "log_parser": "parse_log_pytest_v2",
   "eval_type": "pass_and_fail"
 }

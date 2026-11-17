@@ -24,15 +24,16 @@ python -m pip install -e .
 ~~~
 
 安装时会一并安装仓库固定的 SWE-bench 5.0.2 版本。后续命令都在仓库根目录的同一个 Python 环境里运行。
+`clb` 入口为官方 SWE-bench 转换镜像参数。任务元数据只用 `image` 记录 Docker Hub 上的 Base 镜像。
 
 ## 生成模型补丁
 
 安装 `mini-swe-agent`，配置模型供应商要求的 API 密钥和环境变量，并将 Bash 变量 `MODEL` 设为模型 ID。
-下面以 Fast Histogram 159 为例。mini-SWE-agent 会读取数据集中的 `problem_statement`，并在 `image_name` 指定的 Base 镜像中生成补丁。
+下面以 Fast Histogram 159 为例。`clb infer` 从本地任务仓库读取题面和 `image`，按摘要固定 Base 镜像，然后调用官方 `swebench infer`。
 
 ~~~bash
 python -m pip install mini-swe-agent
-swebench infer Alex-cpu0814/CLB-SWE-bench \
+clb infer \
     -m "$MODEL" \
     --run-id clb-159 \
     -w 1 \
@@ -45,17 +46,16 @@ swebench infer Alex-cpu0814/CLB-SWE-bench \
 
 ## 评测
 
-`--task-repo .` 指向当前的任务仓库。SWE-bench 使用其中的 `Dockerfile` 构建评测镜像，将模型补丁应用到对应的起始代码，再运行评测脚本。
+`clb eval` 将本地任务提供给官方 `swebench eval`。SWE-bench 按现有 `Dockerfile` 构建评测镜像，应用候选补丁并运行评测脚本。评测镜像使用独立的本地标签，供本次评测使用。
 
 ### 评测模型补丁
 
 ~~~bash
-swebench eval Alex-cpu0814/CLB-SWE-bench \
+clb eval \
     -p logs/inference/clb-159/preds.json \
     -i astrofrog__fast-histogram-clb-159 \
     --run-id clb-159 \
-    -j 1 \
-    --task-repo .
+    -j 1
 ~~~
 
 结果写入 `logs/evaluation/clb-159/results.json`。全部 `FAIL_TO_PASS` 和 `PASS_TO_PASS` 测试通过时，该题判为已修复。
@@ -68,11 +68,10 @@ swebench eval Alex-cpu0814/CLB-SWE-bench \
 `--gold` 使用数据集中的参考补丁，可用于检查构建、测试和评分流程。
 
 ~~~bash
-swebench eval Alex-cpu0814/CLB-SWE-bench --gold \
+clb eval --gold \
     -i astrofrog__fast-histogram-clb-159 \
     --run-id clb-159-gold \
-    -j 1 \
-    --task-repo .
+    -j 1
 ~~~
 
 ## 仓库结构
@@ -90,12 +89,11 @@ dockerfile-gen --instance_ids astrofrog__fast-histogram-clb-159
 dockerfile-gen --check
 ~~~
 
-用官方 CLI 校验并导出数据集。
+校验和导出复用 SWE-bench 的任务格式检查与数据导出。导出的 `image` 使用发布的 Base 镜像地址。
 
 ~~~bash
-swebench dataset check .
-swebench dataset build . -o scratch/dataset
-cp docs/dataset-card.md scratch/dataset/CLB-SWE-bench/README.md
+clb check
+clb build -o scratch/dataset
 ~~~
 
 导出目录 `scratch/dataset/CLB-SWE-bench/` 包含 `test.parquet`、`eval.yaml` 和数据集卡片。

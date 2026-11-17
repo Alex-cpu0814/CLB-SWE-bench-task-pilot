@@ -8,6 +8,11 @@ from swebench.task.repo import load_yaml, task_dirs
 from . import render_files
 
 
+def published_base_image(instance_id: str) -> str:
+    repository = instance_id.replace("__", "_1776_").lower()
+    return f"yutu0814/sweb.eval.x86_64.{repository}:latest"
+
+
 def load_base_images(task_repo: Path) -> dict[str, str]:
     manifest = task_repo / "dockerfile_gen" / "data" / "base-images.json"
     try:
@@ -34,6 +39,8 @@ def plan_updates(task_repo: Path, instance_ids: list[str] | None) -> tuple[int, 
         metadata = load_yaml(directory / "task.yaml")
         if metadata["instance_id"] != name:
             raise ValueError(f"Task metadata does not match directory name: {name}")
+        if metadata["image"] != published_base_image(name):
+            raise ValueError(f"Unexpected published Base image: {name}")
         patch = (directory / "test.patch").read_bytes().decode("utf-8")
         generated = render_files(name, metadata["cohort"], metadata["base_commit"], references[name], patch)
         for filename, content in generated.items():

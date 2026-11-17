@@ -2,6 +2,8 @@
 
 ## 未发布
 
+- 72 题统一使用 `image` 指向 Docker Hub 上的 `yutu0814/sweb.eval.x86_64.*:latest` Base 镜像。
+- `clb` 命令适配 Base 镜像字段并复用官方 SWE-bench 的推理、评测、校验和导出流程。
 - 将数据导出步骤合并到仓库首页，新旧实例 ID 对照表移入 `docs/`，历史复测材料保存在提交 `ccb644f`。
 - 将生成器命令入口和评测模板集中到 `dockerfile_gen/__init__.py`。安装后通过 `dockerfile-gen` 或 `clb-dockerfile-gen` 运行。
 - 按项目共享构建步骤，按题配置测试命令。Dockerfile 内嵌评测辅助文件，历史复测工具移入 `tools/archive/`。
