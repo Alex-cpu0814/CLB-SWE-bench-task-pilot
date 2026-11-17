@@ -97,4 +97,4 @@ clb build -o scratch/dataset
 ~~~
 
 导出目录 `scratch/dataset/SWE-bench_CLB/` 包含 `test.parquet`、`eval.yaml` 和数据集卡片。
-[Base 和 Gold 验证记录](docs/validation.md) · [题面审核](docs/pilot-task-review.md) · [变更日志](CHANGELOG.md)
+[Base 和 Gold 验证记录](docs/validation.md) · [变更日志](CHANGELOG.md)

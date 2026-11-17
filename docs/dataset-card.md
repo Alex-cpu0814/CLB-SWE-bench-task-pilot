@@ -25,6 +25,8 @@ SWE-bench CLB is a cross-language software repair benchmark for Python–C and J
 
 The split contains 64 problem statements drawn from archived upstream issues and eight retained from the frozen CLB release. The [task index](https://github.com/Alex-cpu0814/swe-bench-clb-tasks/blob/main/tasks/README.md) identifies the language combination and test source for each instance.
 
+The source review documents the upstream records checked for the eight retained statements. [Archived source review](https://github.com/Alex-cpu0814/swe-bench-clb-tasks/blob/98b99d2d976f8368788d8613ff2710f5b54a655d/docs/pilot-task-review.md#source-review-for-eight-frozen-statements)
+
 ## Dataset Structure
 
 The `test` split contains one row per repair task. Each row has these fields.
