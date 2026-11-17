@@ -37,7 +37,8 @@ repo              (str)        Upstream GitHub repository in owner/repo form.
 base_commit       (str)        Commit SHA at which the repair starts.
 version           (str)        CLB release identifier.
 cohort            (str)        Task group by language pair and test source.
-image             (str)        Public CLB Base image on Docker Hub.
+image_name        (str)        CLB Docker Hub image used for model inference.
+image             (str)        The same Docker Hub image, used for evaluation.
 log_parser        (str)        Parser used to extract test results from logs.
 eval_type         (str)        Grading mode, set to pass_and_fail.
 patch             (str)        Reference repair (Gold patch).
@@ -49,11 +50,11 @@ FAIL_TO_PASS      (list[str])  Tests expected to fail on Base and pass after rep
 PASS_TO_PASS      (list[str])  Tests expected to pass on Base and after repair.
 ```
 
-The `cohort` values `python50`, `java_author11`, and `java_upstream11` correspond to the three groups above, in that order. Base image names use the `yutu0814/sweb.eval.x86_64.*:latest` convention. SWE-bench builds separate evaluation images from the task checkout.
+The `cohort` values `python50`, `java_author11`, and `java_upstream11` correspond to the three groups above, in that order. Both image fields use the `yutu0814/sweb.eval.x86_64.*:latest` convention.
 
 ## Install
 
-Use Linux or WSL 2 with Python 3.10+, Git, and Docker with Linux amd64 support and Buildx. The CLB task repository installs its `clb` command and pins SWE-bench 5.0.2.
+Use Linux or WSL 2 with Python 3.10+, Git, and Docker with Linux amd64 support. The CLB task repository pins SWE-bench 5.0.2.
 
 ```bash
 git clone https://github.com/Alex-cpu0814/swe-bench-clb-tasks.git
@@ -65,11 +66,11 @@ python -m pip install -e .
 
 ## Generate predictions
 
-Install mini-SWE-agent in the same environment, configure your model provider, and set `MODEL` to your model ID. Run from the root of the CLB task checkout. `clb infer` passes the task statement and digest-pinned Base image to the official inference command.
+Install mini-SWE-agent in the same environment, configure your model provider, and set `MODEL` to your model ID. SWE-bench gives mini-SWE-agent the problem statement and the image in `image_name`.
 
 ```bash
 python -m pip install mini-swe-agent
-clb infer \
+swebench infer Alex-cpu0814/SWE-bench_CLB \
     -m "$MODEL" \
     --run-id clb-159 \
     -w 1 \
@@ -80,12 +81,12 @@ The runner writes `logs/inference/clb-159/preds.json` and the task trajectory.
 
 ## Evaluation
 
-Run from the CLB task checkout. `clb eval` gives the official SWE-bench evaluator the task files so it can build the selected evaluation images locally. [CLB task repository](https://github.com/Alex-cpu0814/swe-bench-clb-tasks)
+SWE-bench starts a fresh container from `image` and applies the candidate patch. The evaluation script then applies the test patch, writes the evaluation fixtures, and runs the tests.
 
 Evaluate the prediction for Fast Histogram 159 generated above.
 
 ```bash
-clb eval \
+swebench eval Alex-cpu0814/SWE-bench_CLB \
     -p logs/inference/clb-159/preds.json \
     -i astrofrog__fast-histogram-clb-159 \
     --run-id clb-159 \
@@ -97,7 +98,7 @@ For a batch of predictions, pass the batch file to `-p` and omit `-i` to evaluat
 Use the reference patch to check that the task builds and scores successfully.
 
 ```bash
-clb eval --gold \
+swebench eval Alex-cpu0814/SWE-bench_CLB --gold \
     -i astrofrog__fast-histogram-clb-159 \
     --run-id clb-159-gold \
     -j 1

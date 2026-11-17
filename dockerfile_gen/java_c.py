@@ -8,23 +8,21 @@ PILOT_NORMALIZERS = {
     "kohlschutter__junixsocket-clb-175": "python3 /opt/clb-pilot/normalize_results.py unittest",
 }
 
-PRESERVE_BIN = {
-    "lwjgl__lwjgl3-clb-056",
-    "lwjgl__lwjgl3-clb-062",
-    "lwjgl__lwjgl3-clb-068",
-    "lwjgl__lwjgl3-clb-069",
-    "lwjgl__lwjgl3-clb-074",
-    "lwjgl__lwjgl3-clb-075",
-    "uclouvain__openjpeg-clb-112",
-}
-
-DOCKER_SETUP = {
-    "lwjgl__lwjgl3-clb-075": "RUN ln -s /opt/clb-deps /benchmark/dependencies\n",
-    # The checkout in this image belongs to the benchmark user.
-    "mdsplus__mdsplus-clb-200": f"USER root\nRUN git config --system --add safe.directory {CONTAINER_WORKDIR}\n",
+# SWE-bench applies the patch as root before eval.sh runs. This checkout
+# belongs to the benchmark user, so configure Git in the shared image.
+DOCKERFILE_OVERRIDES = {
+    "mdsplus__mdsplus-clb-200": (
+        "FROM yutu0814/clb.base.x86_64.mdsplus_1776_mdsplus-clb-200:latest\n"
+        "USER root\n"
+        f"RUN git config --system --add safe.directory {CONTAINER_WORKDIR}\n"
+        "USER benchmark\n"
+    ),
 }
 
 EVAL_SETUP = {
+    "lwjgl__lwjgl3-clb-075": (
+        "ln -sfnT /opt/clb-deps /benchmark/dependencies || fail 'Cannot link build dependencies'\n"
+    ),
     "kohlschutter__junixsocket-clb-170": (
         "mkdir -p /case-noexec /case-exec || fail 'Cannot create test mountpoints'\n"
         "mount -t tmpfs -o rw,noexec,nosuid,size=64m tmpfs /case-noexec "

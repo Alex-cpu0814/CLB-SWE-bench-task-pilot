@@ -1,17 +1,14 @@
 """Helpers for validating and preparing generator inputs."""
 
-import re
-
 from swebench.utils import generate_heredoc_delimiter
 
-from .constants import TEST_PATCH_DELIMITER
+from .constants import END_TEST_OUTPUT, TEST_PATCH_DELIMITER
 
 
-def validate_base_image(instance_id: str, base_image: str) -> None:
-    slug = instance_id.replace("__", "_1776_")
-    name = re.escape(f"yutu0814/clb.base.x86_64.{slug}:latest@sha256:")
-    if not isinstance(base_image, str) or not re.fullmatch(name + "[0-9a-f]{64}", base_image):
-        raise ValueError(f"Invalid pinned Base image for {instance_id}")
+def validate_shared_image(instance_id: str, image: str, image_name: str) -> None:
+    slug = instance_id.replace("__", "_1776_").lower()
+    if image != f"yutu0814/sweb.eval.x86_64.{slug}:latest" or image_name != image:
+        raise ValueError(f"image and image_name must use the same CLB image tag for {instance_id}")
 
 
 def prepare_test_patch(instance_id: str, test_patch: str) -> str:
@@ -22,9 +19,15 @@ def prepare_test_patch(instance_id: str, test_patch: str) -> str:
     return test
 
 
-def copy_inline(content: str, target: str) -> str:
-    """Add a literal file to the Dockerfile without a companion build-context file."""
-    if not content.endswith("\n"):
-        raise ValueError(f"Inline Dockerfile content must end with a newline: {target}")
+def write_inline(content: str, target: str) -> str:
+    """Write an evaluation fixture after the candidate patch has been applied."""
+    # SWE-bench strips these shell lines and inserts grading at the output marker.
+    removed_lines = {"#!/bin/bash", "set -uxo pipefail"}
+    if (
+        not content.endswith("\n")
+        or removed_lines.intersection(content.splitlines())
+        or END_TEST_OUTPUT in content
+    ):
+        raise ValueError(f"Cannot embed evaluation fixture: {target}")
     delimiter = generate_heredoc_delimiter(content)
-    return f"\nCOPY --chmod=0644 <<'{delimiter}' {target}\n{content}{delimiter}\n"
+    return f"cat > {target} <<'{delimiter}' || fail 'Cannot write {target}'\n{content}{delimiter}\n"

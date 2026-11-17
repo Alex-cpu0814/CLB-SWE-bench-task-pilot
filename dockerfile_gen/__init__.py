@@ -9,7 +9,7 @@ from yaml import YAMLError
 
 from . import java_c, python_c
 from .constants import CONTAINER_WORKDIR, END_TEST_OUTPUT, START_TEST_OUTPUT, TEST_PATCH_DELIMITER
-from .utils import copy_inline, prepare_test_patch, validate_base_image as validate_base_image
+from .utils import prepare_test_patch, write_inline
 
 
 EVAL_SCRIPT = f"""#!/bin/bash
@@ -23,13 +23,13 @@ fail() {{
 
 cd {CONTAINER_WORKDIR} || fail 'Cannot enter {CONTAINER_WORKDIR}'
 [[ "$(git rev-parse HEAD)" == "@BASE@" ]] || fail 'Unexpected Base commit'
-source /benchmark/case_adapter.sh || fail 'Cannot load case adapter'
 git apply --whitespace=nowarn - <<'{TEST_PATCH_DELIMITER}' || fail 'Test patch application failed'
 @TEST@
 {TEST_PATCH_DELIMITER}
 
+@ASSETS@source /benchmark/case_adapter.sh || fail 'Cannot load case adapter'
 mkdir -p /results || fail 'Cannot create test output directory'
-@MOUNTS@build_project || fail 'Project build failed'
+@SETUP@build_project || fail 'Project build failed'
 run_project_tests >/results/tests.raw.log 2>&1
 test_status=$?
 cat /results/tests.raw.log
@@ -63,7 +63,7 @@ git apply --whitespace=nowarn - <<'{TEST_PATCH_DELIMITER}'
 @TEST@
 {TEST_PATCH_DELIMITER}
 [[ "$?" == 0 ]] || fail "Test patch application failed"
-source /opt/clb-pilot/case_adapter.sh || fail "Cannot load the case adapter"
+@ASSETS@source /opt/clb-pilot/case_adapter.sh || fail "Cannot load the case adapter"
 build_project || fail "Project build failed"
 raw_log=$(mktemp) || fail "Cannot create a test log"
 trap 'rm -f "$raw_log"' EXIT
@@ -81,9 +81,8 @@ exit "$test_status"
 '''
 
 
-def render_files(instance_id, cohort, base_commit, base_image, test_patch):
-    """Render both task files from metadata, the pinned image, and the test patch."""
-    validate_base_image(instance_id, base_image)
+def render_files(instance_id, cohort, base_commit, image, test_patch):
+    """Render the shared image recipe and evaluation script from task metadata."""
     if not isinstance(base_commit, str) or not re.fullmatch("[0-9a-f]{40}", base_commit):
         raise ValueError(f"Invalid Base commit for {instance_id}")
     test = prepare_test_patch(instance_id, test_patch)
@@ -101,27 +100,23 @@ def render_files(instance_id, cohort, base_commit, base_image, test_patch):
         script = PILOT_EVAL_SCRIPT.replace("@NORMALIZE@", pilot_normalizer)
     else:
         asset_dir = "/benchmark"
-        script = EVAL_SCRIPT.replace("@MOUNTS@", java_c.EVAL_SETUP.get(instance_id, ""))
+        script = EVAL_SCRIPT.replace("@SETUP@", java_c.EVAL_SETUP.get(instance_id, ""))
 
     project = instance_id.rsplit("-clb-", 1)[0]
     build = language.BUILD_OVERRIDES.get(instance_id, language.BUILD_BY_PROJECT[project])
     test_commands = language.TEST_COMMANDS[instance_id]
     adapter = f"#!/usr/bin/env bash\n{build}run_project_tests() {{\n{test_commands}"
-    dockerfile = f"FROM {base_image}\n"
-    dockerfile += copy_inline(adapter, f"{asset_dir}/case_adapter.sh")
+    dockerfile = java_c.DOCKERFILE_OVERRIDES.get(instance_id, f"FROM {image}\n")
+    assets = [f"mkdir -p {asset_dir} || fail 'Cannot create evaluation fixture directory'\n"]
+    assets.append(write_inline(adapter, f"{asset_dir}/case_adapter.sh"))
 
     fixtures = files(__package__) / "fixtures"
     sources = language.PROJECT_FIXTURES.get(project, ()) + language.INSTANCE_FIXTURES.get(instance_id, ())
     for source in sorted(sources, key=lambda path: path.rsplit("/", 1)[-1]):
         fixture = fixtures.joinpath(*source.split("/"))
-        dockerfile += copy_inline(fixture.read_text(encoding="utf-8"), f"{asset_dir}/{fixture.name}")
+        assets.append(write_inline(fixture.read_text(encoding="utf-8"), f"{asset_dir}/{fixture.name}"))
 
-    if language is java_c and not pilot_normalizer:
-        dockerfile += java_c.DOCKER_SETUP.get(instance_id, "")
-        excluded = " -e bin" if instance_id in java_c.PRESERVE_BIN else ""
-        dockerfile += f"RUN git -C {CONTAINER_WORKDIR} clean -fdx{excluded}\n"
-
-    script = script.replace("@BASE@", base_commit).replace("@TEST@", test)
+    script = script.replace("@BASE@", base_commit).replace("@TEST@", test).replace("@ASSETS@", "".join(assets))
     return {"Dockerfile": dockerfile.encode("utf-8"), "eval.sh": script.encode("utf-8")}
 
 
