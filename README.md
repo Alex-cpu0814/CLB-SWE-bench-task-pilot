@@ -16,8 +16,8 @@ CLB SWE-bench 是一个跨语言软件修复数据集，包含 72 个 Python–C
 需要 Git、Python 3.10+（建议 3.11 或更新版本）和支持 Linux amd64 镜像的 Docker。评测时还需要 Docker Buildx。
 
 ~~~bash
-git clone https://github.com/Alex-cpu0814/CLB-SWE-bench-task-pilot.git
-cd CLB-SWE-bench-task-pilot
+git clone https://github.com/Alex-cpu0814/swe-bench-clb-tasks.git
+cd swe-bench-clb-tasks
 python3 -m venv .venv
 source .venv/bin/activate
 python -m pip install -e .

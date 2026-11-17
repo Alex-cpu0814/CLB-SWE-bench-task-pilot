@@ -82,7 +82,7 @@ SciPy 的一个镜像层首次下载停滞，重试后完成。
 
 要复测 Base、Gold 和三条历史候选补丁，从提交 `ccb644f` 建立独立工作树。
 在该工作树安装依赖后，用新建的构建器构建镜像并运行归档脚本。
-[历史复测归档](https://github.com/Alex-cpu0814/CLB-SWE-bench-task-pilot/tree/ccb644f936ac310df32daeab38cc2cbbb720d20f/tools/archive)
+[历史复测归档](https://github.com/Alex-cpu0814/swe-bench-clb-tasks/tree/ccb644f936ac310df32daeab38cc2cbbb720d20f/tools/archive)
 
 ~~~bash
 git worktree add --detach ../clb-historical-repro ccb644f936ac310df32daeab38cc2cbbb720d20f

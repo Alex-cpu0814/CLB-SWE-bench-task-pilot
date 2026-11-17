@@ -23,7 +23,7 @@ CLB SWE-bench is a cross-language software repair benchmark for Python–C and J
 | Java–C with CLB-authored tests | 11 |
 | Java–C with upstream tests | 11 |
 
-The split contains 64 problem statements drawn from archived upstream issues and eight retained from the frozen CLB release. The [task index](https://github.com/Alex-cpu0814/CLB-SWE-bench-task-pilot/blob/main/tasks/README.md) identifies the language combination and test source for each instance.
+The split contains 64 problem statements drawn from archived upstream issues and eight retained from the frozen CLB release. The [task index](https://github.com/Alex-cpu0814/swe-bench-clb-tasks/blob/main/tasks/README.md) identifies the language combination and test source for each instance.
 
 ## Dataset Structure
 
@@ -54,8 +54,8 @@ The `cohort` values `python50`, `java_author11`, and `java_upstream11` correspon
 Use Linux or WSL 2 with Python 3.10+, Git, and Docker with Linux amd64 support and Buildx. The CLB task repository installs its `clb` command and pins SWE-bench 5.0.2.
 
 ```bash
-git clone https://github.com/Alex-cpu0814/CLB-SWE-bench-task-pilot.git
-cd CLB-SWE-bench-task-pilot
+git clone https://github.com/Alex-cpu0814/swe-bench-clb-tasks.git
+cd swe-bench-clb-tasks
 python3 -m venv .venv
 source .venv/bin/activate
 python -m pip install -e .
@@ -78,7 +78,7 @@ The runner writes `logs/inference/clb-159/preds.json` and the task trajectory.
 
 ## Evaluation
 
-Run from the CLB task checkout. `clb eval` gives the official SWE-bench evaluator the task files so it can build the selected evaluation images locally. [CLB task repository](https://github.com/Alex-cpu0814/CLB-SWE-bench-task-pilot)
+Run from the CLB task checkout. `clb eval` gives the official SWE-bench evaluator the task files so it can build the selected evaluation images locally. [CLB task repository](https://github.com/Alex-cpu0814/swe-bench-clb-tasks)
 
 Evaluate the prediction for Fast Histogram 159 generated above.
 
@@ -101,4 +101,4 @@ clb eval --gold \
     -j 1
 ```
 
-The published validation covers Base and Gold checks for all 72 tasks. [Validation record](https://github.com/Alex-cpu0814/CLB-SWE-bench-task-pilot/blob/main/docs/validation.md)
+The published validation covers Base and Gold checks for all 72 tasks. [Validation record](https://github.com/Alex-cpu0814/swe-bench-clb-tasks/blob/main/docs/validation.md)
